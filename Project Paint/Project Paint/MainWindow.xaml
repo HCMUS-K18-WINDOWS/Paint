@@ -1,0 +1,234 @@
+﻿<Window x:Class="Project_Paint.MainWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:dxc="http://schemas.devexpress.com/winfx/2008/xaml/core"
+        xmlns:local="clr-namespace:Project_Paint"
+        mc:Ignorable="d"
+        WindowState="Maximized"
+        ResizeMode="CanResize"
+        xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
+        Title="MainWindow" Height="582" Width="1005" WindowStartupLocation="CenterScreen"
+        xmlns:dxe="http://schemas.devexpress.com/winfx/2008/xaml/editors">
+
+    <!--TextElement.Foreground="{DynamicResource MaterialDesignBody}"
+        TextElement.FontWeight="Regular"
+        TextElement.FontSize="13"
+        TextOptions.TextFormattingMode="Ideal"
+        TextOptions.TextRenderingMode="Auto"
+        Background="{DynamicResource MaterialDesignPaper}"
+        FontFamily="{DynamicResource MaterialDesignFont}"-->
+    <DockPanel>
+
+        <Menu DockPanel.Dock="Top" Height="25"
+  IsMainMenu="True">
+            <MenuItem Height="25" FontSize="12"
+    Header="_File">
+                <MenuItem
+      Header="Save"
+      Icon="{materialDesign:PackIcon Kind=ContentSave}"></MenuItem>
+                <MenuItem
+      Header="Save As.." />
+                <MenuItem
+      Header="Exit"
+      Icon="{materialDesign:PackIcon Kind=ExitToApp}" />
+            </MenuItem>
+            <MenuItem Height="25" FontSize="12"
+    Header="_Edit">
+                <MenuItem
+      Header="_Cut"
+      Command="Cut"
+      Icon="{materialDesign:PackIcon Kind=ContentCut}" />
+                <MenuItem
+      Header="_Copy"
+      Command="Copy"
+      Icon="{materialDesign:PackIcon Kind=ContentCopy}" />
+                <MenuItem
+      Header="_Paste"
+      Command="Paste"
+      Icon="{materialDesign:PackIcon Kind=ContentPaste}" />
+            </MenuItem>
+        </Menu>
+
+        <ToolBarTray DockPanel.Dock="Top">
+            <ToolBar
+    Style="{DynamicResource MaterialDesignToolBar}"
+    ClipToBounds="False">
+                <Label
+      Content="Shape:"
+      VerticalAlignment="Center" />
+                <ComboBox VerticalAlignment="Center" SelectionChanged="Shape_Selected">
+                    <ComboBoxItem IsSelected="True"
+        Content="{materialDesign:PackIcon Kind=Minus}"/>
+                    <ComboBoxItem
+        Content="{materialDesign:PackIcon Kind=RectangleOutline}"/>
+                    <ComboBoxItem
+        Content="{materialDesign:PackIcon Kind=CircleOutline}"/>
+                    <ComboBoxItem
+        Content="{materialDesign:PackIcon Kind=TriangleOutline}" />
+                </ComboBox>
+                <Separator />
+                <Button x:Name="brushButton" Click="Brush_Button_Click" Foreground="Gray" Margin="0,0,10,0" Width="20" Height="20" Style="{StaticResource MaterialDesignFloatingActionMiniAccentButton}"  Background="{x:Null}" BorderBrush="{x:Null}">
+                    <materialDesign:PackIcon Kind="Brush" Width="20" Height="20" VerticalAlignment="Center" HorizontalAlignment="Center"/>
+                </Button>
+                <Button Click="Color_Table_Selected" Width="20" Height="20" Style="{StaticResource MaterialDesignFloatingActionMiniAccentButton}"  Background="{x:Null}" BorderBrush="{x:Null}">
+                    <materialDesign:PackIcon Kind="Palette" Width="20" Height="20" VerticalAlignment="Center" HorizontalAlignment="Center"/>
+                </Button>
+                <Border x:Name="color_react" BorderBrush="Black" BorderThickness="2" VerticalAlignment="Center" Height="20" Width="20" />
+                <Separator />
+                
+                <Label
+      Content="Size:"
+      VerticalAlignment="Center" />
+                <Slider x:Name="mySlider" VerticalAlignment="Center" Width="100"
+                  Minimum="1"
+                  Maximum="100"
+                  Value="10" />
+                <Label Width="45" VerticalAlignment="Center" Content="{Binding ElementName=mySlider, Path=Value}" ContentStringFormat="{}{0:#} px" />
+                <Separator />
+                <Label
+      Content="Stroke:"
+      VerticalAlignment="Center" />
+                <ComboBox VerticalAlignment="Center" >
+                    <ComboBoxItem IsSelected="True"
+        Content="{materialDesign:PackIcon Kind=Minus}" />
+                    <ComboBoxItem
+        Content="{materialDesign:PackIcon Kind=DotsHorizontal}" />
+                </ComboBox>
+                <!--<ComboBox VerticalAlignment="Center" >
+                    <ComboBoxItem
+        Content="10" />
+                    <ComboBoxItem
+        IsSelected="True"
+        Content="12" />
+                    <ComboBoxItem
+        Content="14" />
+                    <ComboBoxItem
+        Content="16" />
+                </ComboBox>-->
+                
+                <!--<CheckBox
+      Content="Check" />
+                <Button
+      ToolTip="Take a nap"
+      ToolBar.OverflowMode="Always"
+      Content="{materialDesign:PackIcon Kind=Hotel}" />
+                <RadioButton
+      GroupName="XXX"
+      Content="Radio" />
+                <RadioButton
+      GroupName="XXX"
+      Content="Ga Ga" />
+                <Separator />
+                <RadioButton
+      GroupName="YYY"
+      Style="{DynamicResource MaterialDesignToolRadioButton}"
+      Content="{materialDesign:PackIcon Kind=Radio}" />
+                <RadioButton
+      GroupName="YYY"
+      Style="{DynamicResource MaterialDesignToolRadioButton}"
+      Content="{materialDesign:PackIcon Kind=EmoticonPoop}" />
+                <Separator />
+                <ToggleButton />-->
+            </ToolBar>
+        </ToolBarTray>
+        <Grid DockPanel.Dock="Bottom">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="6*"/>
+                <ColumnDefinition Width="1*"/>
+            </Grid.ColumnDefinitions>
+            <Grid Grid.Column="0">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="247*"/>
+                    <ColumnDefinition Width="614*"/>
+                </Grid.ColumnDefinitions>
+
+
+            </Grid>
+
+            <materialDesign:DialogHost Grid.Column="1"
+  DialogClosing="Sample1_DialogHost_OnDialogClosing"
+  DialogTheme="Inherit">
+                <materialDesign:DialogHost.DialogContent>
+                    <StackPanel
+      Margin="16">
+                        <TextBlock
+        Text="Add a new fruit." />
+                        <TextBox
+        Margin="0 8 0 0"
+        HorizontalAlignment="Stretch"
+        x:Name="FruitTextBox" />
+                        <StackPanel
+        Orientation="Horizontal"
+        HorizontalAlignment="Right">
+                            <Button
+          Style="{StaticResource MaterialDesignFlatButton}"
+          IsDefault="True"
+          Margin="0 8 8 0"
+          Content="ACCEPT"
+          Command="{x:Static materialDesign:DialogHost.CloseDialogCommand}">
+                                <Button.CommandParameter>
+                                    <system:Boolean xmlns:system="clr-namespace:System;assembly=mscorlib">
+                                        True
+                                    </system:Boolean>
+                                </Button.CommandParameter>
+                            </Button>
+                            <Button
+          Style="{StaticResource MaterialDesignFlatButton}"
+          IsCancel="True"
+          Margin="0 8 8 0"
+          Content="CANCEL"
+          Command="{x:Static materialDesign:DialogHost.CloseDialogCommand}">
+                                <Button.CommandParameter>
+                                    <system:Boolean xmlns:system="clr-namespace:System;assembly=mscorlib">
+                                        False
+                                    </system:Boolean>
+                                </Button.CommandParameter>
+                            </Button>
+                        </StackPanel>
+                    </StackPanel>
+                </materialDesign:DialogHost.DialogContent>
+                <Border
+    BorderThickness="1"
+    BorderBrush="{DynamicResource PrimaryHueMidBrush}"
+    MinHeight="256"
+    ClipToBounds="True">
+                    <Grid>
+                        <Grid.RowDefinitions>
+                            <RowDefinition
+          Height="*" />
+                            <RowDefinition
+          Height="Auto" />
+                        </Grid.RowDefinitions>
+                        <ListBox
+        x:Name="FruitListBox">
+                            <ListBoxItem
+          Content="Apple" />
+                            <ListBoxItem
+          Content="Banana" />
+                            <ListBoxItem
+          Content="Pear" />
+                        </ListBox>
+                        <materialDesign:ColorZone
+        Mode="PrimaryMid"
+        Grid.Row="1"
+        Effect="{DynamicResource MaterialDesignShadowDepth5}">
+                            <TextBlock
+          Margin="16"
+          Text="Layer" />
+                        </materialDesign:ColorZone>
+                        <Button
+        Style="{StaticResource MaterialDesignFloatingActionMiniAccentButton}"
+        Command="{x:Static materialDesign:DialogHost.OpenDialogCommand}"
+        VerticalAlignment="Bottom"
+        HorizontalAlignment="Right"
+        Grid.Row="0"
+        Margin="0 0 28 -20"
+        Content="{materialDesign:PackIcon Kind=Plus, Size=22}" />
+                    </Grid>
+                </Border>
+            </materialDesign:DialogHost>
+        </Grid>
+    </DockPanel>
+</Window>
