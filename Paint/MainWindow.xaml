@@ -57,15 +57,15 @@
                 <Label
       Content="Shape:"
       VerticalAlignment="Center" />
-                <ComboBox VerticalAlignment="Center" SelectionChanged="Shape_Selected">
-                    <ComboBoxItem IsSelected="True"
+                <ComboBox x:Name="Cbb_Shape" VerticalAlignment="Center" SelectionChanged="Shape_Selected">
+                    <!--<ComboBoxItem IsSelected="True"
         Content="{materialDesign:PackIcon Kind=Minus}"/>
                     <ComboBoxItem
         Content="{materialDesign:PackIcon Kind=RectangleOutline}"/>
                     <ComboBoxItem
         Content="{materialDesign:PackIcon Kind=CircleOutline}"/>
                     <ComboBoxItem
-        Content="{materialDesign:PackIcon Kind=TriangleOutline}" />
+        Content="{materialDesign:PackIcon Kind=TriangleOutline}" />-->
                 </ComboBox>
                 <Separator />
                 <Button x:Name="brushButton" Click="Brush_Button_Click" Foreground="Gray" Margin="0,0,10,0" Width="20" Height="20" Style="{StaticResource MaterialDesignFloatingActionMiniAccentButton}"  Background="{x:Null}" BorderBrush="{x:Null}">
@@ -82,17 +82,17 @@
       VerticalAlignment="Center" />
                 <Slider x:Name="mySlider" VerticalAlignment="Center" Width="100"
                   Minimum="1"
-                  Maximum="100"
-                  Value="10" />
+                  Maximum="60"
+                  Value="2" ValueChanged="mySlider_ValueChanged" />
                 <Label Width="45" VerticalAlignment="Center" Content="{Binding ElementName=mySlider, Path=Value}" ContentStringFormat="{}{0:#} px" />
                 <Separator />
                 <Label
       Content="Stroke:"
       VerticalAlignment="Center" />
-                <ComboBox VerticalAlignment="Center" >
-                    <ComboBoxItem IsSelected="True"
+                <ComboBox x:Name="CbbStroke" VerticalAlignment="Center" SelectionChanged="ComboBox_SelectionChanged" >
+                    <ComboBoxItem IsSelected="True" x:Name="SOLID"
         Content="{materialDesign:PackIcon Kind=Minus}" />
-                    <ComboBoxItem
+                    <ComboBoxItem Name="DASHDOT"
         Content="{materialDesign:PackIcon Kind=DotsHorizontal}" />
                 </ComboBox>
                 <!--<ComboBox VerticalAlignment="Center" >
@@ -138,12 +138,19 @@
                 <ColumnDefinition Width="1*"/>
             </Grid.ColumnDefinitions>
             <Grid Grid.Column="0">
-                <Grid.ColumnDefinitions>
-                    <ColumnDefinition Width="247*"/>
-                    <ColumnDefinition Width="614*"/>
-                </Grid.ColumnDefinitions>
+                <Grid>
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="27*"/>
+                        <ColumnDefinition Width="260*"/>
+                    </Grid.ColumnDefinitions>
+                    <Canvas x:Name="canvas" Background="White" Grid.ColumnSpan="2">
 
+                    </Canvas>
+                    <Border Background="Transparent" MouseDown="Canvas_MouseDown" MouseUp="Canvas_MouseUp"
+                        MouseMove="Canvas_MouseMove" Grid.ColumnSpan="2">
 
+                    </Border>
+                </Grid>
             </Grid>
 
             <materialDesign:DialogHost Grid.Column="1"

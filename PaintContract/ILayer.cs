@@ -7,6 +7,8 @@ namespace PaintContract
     {
         string Name { get; }
         Point2D Offset { get; set; }
+        public bool IsShow { get; set; }
+        public string GetUniqueName();
         UIElement Draw();
     }
 }
