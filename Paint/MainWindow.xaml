@@ -24,11 +24,12 @@
   IsMainMenu="True">
             <MenuItem Height="25" FontSize="12"
     Header="_File">
-                <MenuItem
+                <MenuItem Click="SaveMenu_Click"
       Header="Save"
       Icon="{materialDesign:PackIcon Kind=ContentSave}"></MenuItem>
                 <MenuItem
       Header="Save As.." />
+                <MenuItem Header="Load" Click="LoadMenu_Click" />
                 <MenuItem
       Header="Exit"
       Icon="{materialDesign:PackIcon Kind=ExitToApp}" />

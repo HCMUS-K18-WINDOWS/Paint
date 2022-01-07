@@ -1,9 +1,12 @@
-﻿using System;
+﻿using Newtonsoft.Json;
+using PaintContract;
+using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Runtime.Serialization.Formatters.Binary;
 using System.Text;
+using System.Text.Json;
 using System.Threading.Tasks;
 
 namespace Paint
@@ -21,23 +24,17 @@ namespace Paint
                 _instance = new IOManager();
             return _instance;
         }
-        public void SaveToBinaryFile<T>(List<T> list, string file)
+        public void SaveToBinaryFile<T>(Dictionary<string, T> dic, string file)
         {
-            using (var stream = File.OpenWrite(file))
-            {
-                var formater = new BinaryFormatter();
-                formater.Serialize(stream, list);
-            }
+            JsonSerializerSettings settings = new JsonSerializerSettings { TypeNameHandling = TypeNameHandling.All, Formatting = Formatting.Indented };
+            var jsonString = JsonConvert.SerializeObject(dic, settings);
+            File.WriteAllText(file, jsonString);
         }
-        public List<T>? LoadFromBinaryFile<T>(string file)
+        public Dictionary<string, T>? LoadFromBinaryFile<T>(string file)
         {
-            var list = new List<T>();
-            using (var stream = File.OpenRead(file))
-            {
-                var formatter = new BinaryFormatter();
-                list = formatter.Deserialize(stream) as List<T>;
-            }
-            return list;
+            JsonSerializerSettings settings = new JsonSerializerSettings { TypeNameHandling = TypeNameHandling.All, Formatting = Formatting.Indented };
+            var jsonString = File.ReadAllText(file);
+            return JsonConvert.DeserializeObject<Dictionary<string, T>>(jsonString, settings);
         }
     }
 }

@@ -210,5 +210,27 @@ namespace Paint
             if (Cbb_Shape.SelectedItem == null) return;
             _preview = ShapeBuilder.GetInstance().BuildShape(Cbb_Shape.SelectedItem.ToString());
         }
+
+        private void SaveMenu_Click(object sender, RoutedEventArgs e)
+        {
+            var saveFileDialog = new SaveFileDialog();
+            saveFileDialog.Filter = "JSON file (*.json) | All files (*.*)";
+            if (saveFileDialog.ShowDialog() == System.Windows.Forms.DialogResult.OK)
+            {
+                string filename = saveFileDialog.FileName;
+                IOManager.GetInstance().SaveToBinaryFile(_layers, filename);
+            }
+        }
+
+        private void LoadMenu_Click(object sender, RoutedEventArgs e)
+        {
+            var openFileDialog = new OpenFileDialog();
+            if (openFileDialog.ShowDialog() == System.Windows.Forms.DialogResult.OK)
+            {
+                string filename = openFileDialog.FileName;
+                _layers = IOManager.GetInstance().LoadFromBinaryFile<ILayer>(filename) ?? _layers;
+                ReDraw();
+            }
+        }
     }
 }

@@ -11,12 +11,11 @@ using System.Windows.Shapes;
 
 namespace PaintLibrary
 {
-
     public class Rectangle2D : IShape
     {
         public static int _numberOfInstances = 0;
-        private Point2D _topLeft;
-        private Point2D _botRight;
+        public Point2D _topLeft;
+        public Point2D _botRight;
         public string Name => "Rectangle";
 
         public Point2D Offset { get; set ; }

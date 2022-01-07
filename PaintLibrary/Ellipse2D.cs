@@ -2,6 +2,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Runtime.Serialization;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows;
@@ -14,8 +15,8 @@ namespace PaintLibrary
     public class Ellipse2D : IShape
     {
         public static int numberOfInstance = 0;
-        private Point2D _topLeft;
-        private Point2D _botRight;
+        public Point2D _topLeft;
+        public Point2D _botRight;
         public StrokeType Stroke { get; set; }
         public double Thickness { get; set; }
         public Color OutlineColor { get; set; }

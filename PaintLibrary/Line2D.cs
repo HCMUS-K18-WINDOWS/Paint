@@ -13,8 +13,8 @@ namespace PaintLibrary
     public class Line2D : IShape
     {
         public static int numberOfInstance = 0;
-        private Point2D _start = new Point2D();
-        private Point2D _end = new Point2D();
+        public Point2D _start = new Point2D();
+        public Point2D _end = new Point2D();
 
         public string Name => "Line";
 
