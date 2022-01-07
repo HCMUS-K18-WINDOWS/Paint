@@ -10,12 +10,12 @@ namespace Paint
 {
     public class IOManager
     {
-        private IOManager? _instance;
+        private static IOManager? _instance;
         private IOManager()
         {
 
         }
-        public IOManager GetInstance()
+        public static IOManager GetInstance()
         {
             if (_instance == null)
                 _instance = new IOManager();
