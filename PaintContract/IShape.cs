@@ -8,7 +8,6 @@ namespace PaintContract
 {
     public interface IShape : ILayer
     {
-        string Name { get; }
         void HandleStart(Point2D point);
         void HandleEnd(Point2D point);
     }
