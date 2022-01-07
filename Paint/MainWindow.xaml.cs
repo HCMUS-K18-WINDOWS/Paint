@@ -1,6 +1,7 @@
 ﻿using PaintContract;
 using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.IO;
 using System.Linq;
 using System.Reflection;
@@ -24,12 +25,15 @@ namespace Paint
     /// </summary>
     public partial class MainWindow : Window
     {
-        private Dictionary<string, ILayer> _layers = new Dictionary<string, ILayer>();
+        //public Dictionary<string, ILayer> Layers { get; set; }
+        public ObservableCollection<KeyValuePair<string, ILayer>> Layers { get; set; }
         IShape _preview;
         private bool _isDrawing = false;
         public MainWindow()
         {
             InitializeComponent();
+            Layers = new ObservableCollection<KeyValuePair<string, ILayer>>();
+            ListBoxLayer.ItemsSource = Layers;
         }
 
         private void Window_Loaded(object sender, RoutedEventArgs e)
@@ -49,10 +53,10 @@ namespace Paint
                 {
                     if(type.IsClass)
                     {
-                        if(typeof(ILayer).IsAssignableFrom(type))
+                        if(typeof(IShape).IsAssignableFrom(type))
                         {
-                            ILayer layer = (ILayer)Activator.CreateInstance(type);
-                            ShapeBuilder.GetInstance()._prototypes.Add(layer.Name, (IShape)layer);
+                            IShape shape = (IShape)Activator.CreateInstance(type);
+                            ShapeBuilder.GetInstance()._prototypes.Add(shape.Name, shape);
                         }
                     }
                 }
@@ -129,8 +133,10 @@ namespace Paint
             _preview.HandleEnd(pos.X, pos.Y);
 
             // generate name
+
+            //Layers.Add(_preview.GetUniqueName(), _preview);
             
-            _layers.Add(_preview.GetUniqueName(), _preview);
+            Layers.Insert(0, new KeyValuePair<string, ILayer>(_preview.GetUniqueName(), _preview));
 
             // Sinh ra đối tượng mẫu kế
             _preview = ShapeBuilder.GetInstance().BuildShape(Cbb_Shape.SelectedItem.ToString());
@@ -143,8 +149,9 @@ namespace Paint
             // Ve lai Xoa toan bo
             canvas.Children.Clear();
             // Ve lai tat ca cac hinh
-            foreach (var shape in _layers.Values)
+            foreach (var keyValuePair in Layers)
             {
+                var shape = keyValuePair.Value;
                 var element = shape.Draw();
                 if (element == null) continue;
                 canvas.Children.Add(element);
@@ -159,8 +166,9 @@ namespace Paint
                 _preview.HandleEnd(pos.X, pos.Y);
                 canvas.Children.Clear();
 
-                foreach(var shape in _layers.Values)
+                foreach(var keyValuePair in Layers)
                 {
+                    var shape = keyValuePair.Value;
                     UIElement element = shape.Draw();
                     canvas.Children.Add(element);
                 }
@@ -218,7 +226,7 @@ namespace Paint
             if (saveFileDialog.ShowDialog() == System.Windows.Forms.DialogResult.OK)
             {
                 string filename = saveFileDialog.FileName;
-                IOManager.GetInstance().SaveToBinaryFile(_layers, filename);
+                IOManager.GetInstance().SaveToBinaryFile(Layers, filename);
             }
         }
 
@@ -228,9 +236,30 @@ namespace Paint
             if (openFileDialog.ShowDialog() == System.Windows.Forms.DialogResult.OK)
             {
                 string filename = openFileDialog.FileName;
-                _layers = IOManager.GetInstance().LoadFromBinaryFile<ILayer>(filename) ?? _layers;
+                Layers = IOManager.GetInstance().LoadFromBinaryFile<ILayer>(filename) ?? Layers;
                 ReDraw();
             }
+        }
+
+        private void ListBoxLayer_TargetUpdated(object sender, DataTransferEventArgs e)
+        {
+            if(ListBoxLayer.Items.Count > 0)
+            {
+                ListBoxLayer.ScrollIntoView(ListBoxLayer.Items[0]);
+            }
+        }
+
+        private void addImage_Click(object sender, RoutedEventArgs e)
+        {
+            OpenFileDialog imgDialog = new OpenFileDialog();
+            if(imgDialog.ShowDialog() == System.Windows.Forms.DialogResult.OK)
+            {
+                string fileName = imgDialog.FileName;
+                var image = new Image2D(fileName);
+                Layers.Insert(0, new KeyValuePair<string, ILayer>(image.GetUniqueName(), image));
+                ReDraw();
+            }
+            
         }
     }
 }

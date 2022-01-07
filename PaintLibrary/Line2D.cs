@@ -12,7 +12,7 @@ namespace PaintLibrary
 {
     public class Line2D : IShape
     {
-        public static int numberOfInstance = 0;
+        public static int numberOfInstances = 0;
         public Point2D _start = new Point2D();
         public Point2D _end = new Point2D();
 
@@ -83,7 +83,7 @@ namespace PaintLibrary
 
         public string GetUniqueName()
         {
-            return Name + ++numberOfInstance;
+            return Name + ++numberOfInstances;
         }
     }
 }
