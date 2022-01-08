@@ -2,6 +2,7 @@
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
+using System.Diagnostics;
 using System.IO;
 using System.Linq;
 using System.Reflection;
@@ -260,6 +261,21 @@ namespace Paint
                 ReDraw();
             }
             
+        }
+
+        private void canvas_MouseWheel(object sender, MouseWheelEventArgs e)
+        {
+            var matTrans = canvas.RenderTransform as MatrixTransform;
+            var pos1 = e.GetPosition(grid);
+            
+            if (e.Delta > 0 && matTrans.Value.M11 > 4.0) return;
+            if (e.Delta < 0 && matTrans.Value.M11 < 0.1) return;
+            var scale = e.Delta > 0 ? 1.1 : 1 / 1.1;
+            var mat = matTrans.Matrix;
+            mat.ScaleAt(scale, scale, pos1.X, pos1.Y);
+            
+            matTrans.Matrix = mat;
+            e.Handled = true;
         }
     }
 }
