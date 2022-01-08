@@ -25,17 +25,17 @@ namespace Paint
                 _instance = new IOManager();
             return _instance;
         }
-        public void SaveToBinaryFile<T>(ObservableCollection<KeyValuePair<string, T>> dic, string file)
+        public void SaveToBinaryFile(LayerSaveDto dic, string file)
         {
             JsonSerializerSettings settings = new JsonSerializerSettings { TypeNameHandling = TypeNameHandling.All, Formatting = Formatting.Indented };
             var jsonString = JsonConvert.SerializeObject(dic, settings);
             File.WriteAllText(file, jsonString);
         }
-        public ObservableCollection<KeyValuePair<string, T>>? LoadFromBinaryFile<T>(string file)
+        public LayerSaveDto? LoadFromBinaryFile(string file)
         {
             JsonSerializerSettings settings = new JsonSerializerSettings { TypeNameHandling = TypeNameHandling.All, Formatting = Formatting.Indented };
             var jsonString = File.ReadAllText(file);
-            return JsonConvert.DeserializeObject<ObservableCollection<KeyValuePair<string, T>>>(jsonString, settings);
+            return JsonConvert.DeserializeObject<LayerSaveDto>(jsonString, settings);
         }
     }
 }

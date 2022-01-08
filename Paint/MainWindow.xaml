@@ -27,10 +27,8 @@
                 <MenuItem Click="SaveMenu_Click"
       Header="Save"
       Icon="{materialDesign:PackIcon Kind=ContentSave}"></MenuItem>
-                <MenuItem
-      Header="Save As.." />
                 <MenuItem Header="Load" Click="LoadMenu_Click" />
-                <MenuItem
+                <MenuItem Click="Exit_Click"
       Header="Exit"
       Icon="{materialDesign:PackIcon Kind=ExitToApp}" />
             </MenuItem>

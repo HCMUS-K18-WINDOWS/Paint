@@ -28,12 +28,15 @@ namespace Paint
     {
         //public Dictionary<string, ILayer> Layers { get; set; }
         public ObservableCollection<KeyValuePair<string, ILayer>> Layers { get; set; }
+        public Dictionary<string, ILayer> PenLines { get; set; }
         IShape _preview;
         private bool _isDrawing = false;
+        private bool _penMode = false;
         public MainWindow()
         {
             InitializeComponent();
             Layers = new ObservableCollection<KeyValuePair<string, ILayer>>();
+            PenLines = new Dictionary<string, ILayer>();
             ListBoxLayer.ItemsSource = Layers;
         }
 
@@ -107,8 +110,17 @@ namespace Paint
 
         private void Brush_Button_Click(object sender, RoutedEventArgs e)
         {
-            var colorBlack = new SolidColorBrush(System.Windows.Media.Color.FromRgb(0, 0, 0));
-            brushButton.Foreground = colorBlack;
+            _penMode = !_penMode;
+            if (_penMode)
+            {
+                var colorBlack = new SolidColorBrush(System.Windows.Media.Color.FromRgb(0, 0, 0));
+                brushButton.Foreground = colorBlack;
+            }
+            else
+            {
+                var colorGray = new SolidColorBrush(System.Windows.Media.Colors.Gray);
+                brushButton.Foreground = colorGray;
+            }
         }
 
         private void Shape_Selected(object sender, RoutedEventArgs e)
@@ -122,11 +134,16 @@ namespace Paint
         {
             _isDrawing = true;
             Point pos = e.GetPosition(canvas);
+            if (_penMode)
+            {
+                _preview = ShapeBuilder.GetInstance().BuildShape("Line");
+            }
             _preview.HandleStart(pos.X, pos.Y);
         }
 
         private void Canvas_MouseUp(object sender, MouseButtonEventArgs e)
         {
+            if (!_isDrawing) return;
             _isDrawing = false;
 
             // Thêm đối tượng cuối cùng vào mảng quản lí
@@ -137,8 +154,8 @@ namespace Paint
 
             //Layers.Add(_preview.GetUniqueName(), _preview);
             
-            Layers.Insert(0, new KeyValuePair<string, ILayer>(_preview.GetUniqueName(), _preview));
-
+            if (!_penMode) Layers.Insert(0, new KeyValuePair<string, ILayer>(_preview.GetUniqueName(), _preview));
+            else PenLines.Add(_preview.GetUniqueName(), _preview);
             // Sinh ra đối tượng mẫu kế
             _preview = ShapeBuilder.GetInstance().BuildShape(Cbb_Shape.SelectedItem.ToString());
 
@@ -157,6 +174,13 @@ namespace Paint
                 if (element == null) continue;
                 canvas.Children.Add(element);
             }
+            foreach (var penLine in PenLines)
+            {
+                var shape = penLine.Value;
+                var element = shape.Draw();
+                if (element == null) continue;
+                canvas.Children.Add(element);
+            }
         }
 
         private void Canvas_MouseMove(object sender, System.Windows.Input.MouseEventArgs e)
@@ -165,16 +189,15 @@ namespace Paint
             {
                 Point pos = e.GetPosition(canvas);
                 _preview.HandleEnd(pos.X, pos.Y);
-                canvas.Children.Clear();
-
-                foreach(var keyValuePair in Layers)
+                if (_penMode)
                 {
-                    var shape = keyValuePair.Value;
-                    UIElement element = shape.Draw();
-                    canvas.Children.Add(element);
+                    PenLines.Add(_preview.GetUniqueName(), _preview);
+                    _preview = ShapeBuilder.GetInstance().BuildShape("Line");
+                    _preview.HandleStart(pos.X, pos.Y);
                 }
+                ReDraw();
 
-                canvas.Children.Add(_preview.Draw());
+                if (!_penMode) canvas.Children.Add(_preview.Draw());
                 Title = $"{pos.X} {pos.Y}";
             }
         }
@@ -223,21 +246,29 @@ namespace Paint
         private void SaveMenu_Click(object sender, RoutedEventArgs e)
         {
             var saveFileDialog = new SaveFileDialog();
-            saveFileDialog.Filter = "JSON file (*.json) | All files (*.*)";
+            saveFileDialog.Filter = "JSON file (*.json)|*.json|All files (*.*)|(*.*)";
             if (saveFileDialog.ShowDialog() == System.Windows.Forms.DialogResult.OK)
             {
                 string filename = saveFileDialog.FileName;
-                IOManager.GetInstance().SaveToBinaryFile(Layers, filename);
+                var newDto = new LayerSaveDto()
+                {
+                    Layers = this.Layers,
+                    PenLines = this.PenLines,
+                };
+                IOManager.GetInstance().SaveToBinaryFile(newDto, filename);
             }
         }
 
         private void LoadMenu_Click(object sender, RoutedEventArgs e)
         {
             var openFileDialog = new OpenFileDialog();
+            openFileDialog.Filter = "JSON file (*.json)|*.json|All files (*.*)|(*.*)";
             if (openFileDialog.ShowDialog() == System.Windows.Forms.DialogResult.OK)
             {
                 string filename = openFileDialog.FileName;
-                Layers = IOManager.GetInstance().LoadFromBinaryFile<ILayer>(filename) ?? Layers;
+                var newDto = IOManager.GetInstance().LoadFromBinaryFile(filename);
+                Layers = newDto.Layers ?? Layers;
+                PenLines = newDto.PenLines ?? PenLines;
                 ReDraw();
             }
         }
@@ -276,6 +307,11 @@ namespace Paint
             
             matTrans.Matrix = mat;
             e.Handled = true;
+        }
+
+        private void Exit_Click(object sender, RoutedEventArgs e)
+        {
+            this.Close();
         }
     }
 }
