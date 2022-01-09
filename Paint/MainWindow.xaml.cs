@@ -269,6 +269,7 @@ namespace Paint
                 var newDto = IOManager.GetInstance().LoadFromBinaryFile(filename);
                 Layers = newDto.Layers ?? Layers;
                 PenLines = newDto.PenLines ?? PenLines;
+                ListBoxLayer.ItemsSource = Layers;
                 ReDraw();
             }
         }
@@ -312,6 +313,20 @@ namespace Paint
         private void Exit_Click(object sender, RoutedEventArgs e)
         {
             this.Close();
+        }
+
+        private void ExportMenu_Click(object sender, RoutedEventArgs e)
+        {
+            var saveFileDialog = new SaveFileDialog();
+            saveFileDialog.Filter = "PNG image (*.png)|*.png|All files (*.*)|(*.*)";
+            if (saveFileDialog.ShowDialog() == System.Windows.Forms.DialogResult.OK)
+            {
+                string err = IOManager.GetInstance().ExportToPNG(canvas, saveFileDialog.FileName);
+                if (err != "")
+                {
+                    System.Windows.MessageBox.Show(err, "Error", MessageBoxButton.OK, MessageBoxImage.Error);
+                }
+            }
         }
     }
 }
