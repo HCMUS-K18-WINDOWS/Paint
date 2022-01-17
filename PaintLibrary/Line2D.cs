@@ -23,6 +23,7 @@ namespace PaintLibrary
         public double Thickness { get; set; }
         public Color OutlineColor { get; set; }
         public bool IsShow { get; set; }
+        public Color InsideColor { get => throw new NotImplementedException(); set => throw new NotImplementedException(); }
 
         public Line2D()
         {

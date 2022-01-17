@@ -76,6 +76,7 @@ namespace Paint
             }
             Cbb_Shape.SelectedIndex = 0;
             _preview = ShapeBuilder.GetInstance().BuildShape(Cbb_Shape.SelectedItem.ToString());
+            
         }
 
         private void TwitterButton_OnClick(object sender, RoutedEventArgs e)
@@ -103,6 +104,20 @@ namespace Paint
             }
         }
 
+        private void Color_Table_Fill_Selected(object sender, RoutedEventArgs e)
+        {
+            var dlg = new ColorDialog(); //Khởi tạo đối tượng ColorDialog 
+
+            if (dlg.ShowDialog() == System.Windows.Forms.DialogResult.OK) //Nếu nhấp vào nút OK trên hộp thoại
+            {
+                var color = System.Windows.Media.Color.FromArgb(dlg.Color.A, dlg.Color.R, dlg.Color.G, dlg.Color.B);
+                color_fill_react.Background = new SolidColorBrush(color);
+
+                ShapeBuilder.GetInstance().BuildColorFill(color);
+                _preview = ShapeBuilder.GetInstance().BuildShape(Cbb_Shape.SelectedItem.ToString());
+            }
+        }
+
         private void Button_Click(object sender, RoutedEventArgs e)
         {
 
@@ -123,12 +138,12 @@ namespace Paint
             }
         }
 
-        private void Shape_Selected(object sender, RoutedEventArgs e)
-        {
-            var colorGray = new SolidColorBrush(System.Windows.Media.Color.FromRgb(128, 128, 128));
-            if (brushButton != null)
-                brushButton.Foreground = colorGray;
-        }
+        //private void Shape_Selected(object sender, RoutedEventArgs e)
+        //{
+        //    var colorGray = new SolidColorBrush(System.Windows.Media.Color.FromRgb(128, 128, 128));
+        //    if (brushButton != null)
+        //        brushButton.Foreground = colorGray;
+        //}
 
         private void Canvas_MouseDown(object sender, MouseButtonEventArgs e)
         {
@@ -209,6 +224,9 @@ namespace Paint
 
         private void Shape_Selected(object sender, SelectionChangedEventArgs e)
         {
+            //_penMode = false;
+            //var colorGray = new SolidColorBrush(System.Windows.Media.Colors.Gray);
+            //brushButton.Foreground = colorGray;
             _preview = ShapeBuilder.GetInstance().BuildShape(Cbb_Shape.SelectedItem.ToString());
         }
 
@@ -328,5 +346,7 @@ namespace Paint
                 }
             }
         }
+
+        
     }
 }

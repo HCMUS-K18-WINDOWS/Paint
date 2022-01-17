@@ -12,6 +12,7 @@ namespace Paint
     {
         void Reset();
         void BuildColor(Color color);
+        void BuildColorFill(Color color);
         void BuildThickness(double t);
         void BuildStroke(StrokeType stt);
         IShape BuildShape(string shapeType);

@@ -13,6 +13,7 @@ namespace Paint
         protected StrokeType Stroke;
         protected double Thickness;
         protected Color OutlineColor;
+        protected Color InsideColor;
         public Dictionary<string, IShape> _prototypes { get; set; }
 
         private ShapeBuilder()
@@ -34,12 +35,21 @@ namespace Paint
             OutlineColor = color;
         }
 
+        public void BuildColorFill(Color color)
+        {
+            InsideColor = color;
+        }
+
         public IShape BuildShape(string shapeType)
         {
             IShape shape = (IShape)_prototypes[shapeType].Clone();
             shape.OutlineColor = OutlineColor;
             shape.Stroke = Stroke;
             shape.Thickness = Thickness;
+            if (shapeType != "Line")
+            {
+                shape.InsideColor = InsideColor;
+            }
             return shape;
         }
 

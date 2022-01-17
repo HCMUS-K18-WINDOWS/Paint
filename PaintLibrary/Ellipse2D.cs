@@ -20,6 +20,7 @@ namespace PaintLibrary
         public StrokeType Stroke { get; set; }
         public double Thickness { get; set; }
         public Color OutlineColor { get; set; }
+        public Color InsideColor { get; set; }
 
         public string Name => "Ellipse";
 
@@ -31,6 +32,7 @@ namespace PaintLibrary
             Stroke = StrokeType.SOLID;
             Thickness = 1;
             OutlineColor = Colors.Black;
+            InsideColor = Colors.White;
             IsShow = true;
         }
         public object Clone()
@@ -54,6 +56,7 @@ namespace PaintLibrary
             {
                 case StrokeType.SOLID:
                     ellipse.Stroke = new SolidColorBrush(OutlineColor);
+                    ellipse.Fill = new SolidColorBrush(InsideColor);
                     break;
                 case StrokeType.DASH:
                     ellipse.Stroke = new SolidColorBrush(OutlineColor);

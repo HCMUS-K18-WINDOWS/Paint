@@ -57,7 +57,7 @@
                 <Label
       Content="Shape:"
       VerticalAlignment="Center" />
-                <ComboBox x:Name="Cbb_Shape" VerticalAlignment="Center" SelectionChanged="Shape_Selected">
+                <ComboBox Margin="0,0,20,0" x:Name="Cbb_Shape" VerticalAlignment="Center" SelectionChanged="Shape_Selected">
                     <!--<ComboBoxItem IsSelected="True"
         Content="{materialDesign:PackIcon Kind=Minus}"/>
                     <ComboBoxItem
@@ -67,14 +67,20 @@
                     <ComboBoxItem
         Content="{materialDesign:PackIcon Kind=TriangleOutline}" />-->
                 </ComboBox>
-                <Separator />
                 <Button x:Name="brushButton" Click="Brush_Button_Click" Foreground="Gray" Margin="0,0,10,0" Width="20" Height="20" Style="{StaticResource MaterialDesignFloatingActionMiniAccentButton}"  Background="{x:Null}" BorderBrush="{x:Null}">
                     <materialDesign:PackIcon Kind="Brush" Width="20" Height="20" VerticalAlignment="Center" HorizontalAlignment="Center"/>
                 </Button>
+                <Separator />
                 <Button Click="Color_Table_Selected" Width="20" Height="20" Style="{StaticResource MaterialDesignFloatingActionMiniAccentButton}"  Background="{x:Null}" BorderBrush="{x:Null}">
                     <materialDesign:PackIcon Kind="Palette" Width="20" Height="20" VerticalAlignment="Center" HorizontalAlignment="Center"/>
                 </Button>
-                <Border x:Name="color_react" Background="Black" BorderBrush="Black" BorderThickness="2" VerticalAlignment="Center" Height="20" Width="20" />
+                <Border Margin="0,0,20,0" x:Name="color_react" Background="Black" BorderBrush="Black" BorderThickness="2" VerticalAlignment="Center" Height="20" Width="20" />
+
+                <Button Click="Color_Table_Fill_Selected" Width="20" Height="20" Style="{StaticResource MaterialDesignFloatingActionMiniAccentButton}"  Background="{x:Null}" BorderBrush="{x:Null}">
+                    <materialDesign:PackIcon Kind="FormatColorFill" Width="20" Height="20"/>
+                </Button>
+                <Border x:Name="color_fill_react" Background="White" BorderBrush="Black" BorderThickness="2" VerticalAlignment="Center" Height="20" Width="20" />
+
                 <Separator />
 
                 <Label
@@ -95,6 +101,7 @@
                     <ComboBoxItem Name="DASHDOT"
         Content="{materialDesign:PackIcon Kind=DotsHorizontal}" />
                 </ComboBox>
+                <Separator/>
                 <Button x:Name="addImage" Click="addImage_Click">Add Image</Button>
                 <!--<ComboBox VerticalAlignment="Center" >
                     <ComboBoxItem

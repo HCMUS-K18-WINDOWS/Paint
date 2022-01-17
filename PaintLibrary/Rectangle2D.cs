@@ -23,6 +23,7 @@ namespace PaintLibrary
         public double Thickness { get ; set ; }
         public Color OutlineColor { get; set ; }
         public bool IsShow { get; set; }
+        public Color InsideColor { get; set; }
 
         public Rectangle2D()
         {
@@ -30,6 +31,7 @@ namespace PaintLibrary
             Stroke = StrokeType.SOLID;
             Thickness = 1;
             OutlineColor = Colors.Black;
+            InsideColor = Colors.White;
             IsShow = true;
         }
 
@@ -54,6 +56,7 @@ namespace PaintLibrary
             {
                 case StrokeType.SOLID:
                     rect.Stroke = new SolidColorBrush(OutlineColor);
+                    rect.Fill = new SolidColorBrush(InsideColor);
                     break;
                 case StrokeType.DASH:
                     rect.Stroke = new SolidColorBrush(OutlineColor);
