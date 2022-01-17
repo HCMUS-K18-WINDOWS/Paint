@@ -182,9 +182,9 @@ namespace Paint
             // Ve lai Xoa toan bo
             canvas.Children.Clear();
             // Ve lai tat ca cac hinh
-            foreach (var keyValuePair in Layers)
+            for(int i = Layers.Count-1; i >= 0; i--)
             {
-                var shape = keyValuePair.Value;
+                var shape = Layers[i].Value;
                 var element = shape.Draw();
                 if (element == null) continue;
                 canvas.Children.Add(element);

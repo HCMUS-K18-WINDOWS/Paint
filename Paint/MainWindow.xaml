@@ -103,41 +103,6 @@
                 </ComboBox>
                 <Separator/>
                 <Button x:Name="addImage" Click="addImage_Click">Add Image</Button>
-                <!--<ComboBox VerticalAlignment="Center" >
-                    <ComboBoxItem
-        Content="10" />
-                    <ComboBoxItem
-        IsSelected="True"
-        Content="12" />
-                    <ComboBoxItem
-        Content="14" />
-                    <ComboBoxItem
-        Content="16" />
-                </ComboBox>-->
-
-                <!--<CheckBox
-      Content="Check" />
-                <Button
-      ToolTip="Take a nap"
-      ToolBar.OverflowMode="Always"
-      Content="{materialDesign:PackIcon Kind=Hotel}" />
-                <RadioButton
-      GroupName="XXX"
-      Content="Radio" />
-                <RadioButton
-      GroupName="XXX"
-      Content="Ga Ga" />
-                <Separator />
-                <RadioButton
-      GroupName="YYY"
-      Style="{DynamicResource MaterialDesignToolRadioButton}"
-      Content="{materialDesign:PackIcon Kind=Radio}" />
-                <RadioButton
-      GroupName="YYY"
-      Style="{DynamicResource MaterialDesignToolRadioButton}"
-      Content="{materialDesign:PackIcon Kind=EmoticonPoop}" />
-                <Separator />
-                <ToggleButton />-->
             </ToolBar>
         </ToolBarTray>
         <Grid DockPanel.Dock="Bottom">
