@@ -62,5 +62,20 @@ namespace Paint
                 return true;
             return false;
         }
+
+        public void handleMove(Point2D p)
+        {
+            throw new NotImplementedException();
+        }
+
+        public void handleMoveDone(Point2D p)
+        {
+            throw new NotImplementedException();
+        }
+
+        public void handleMoveDone()
+        {
+            throw new NotImplementedException();
+        }
     }
 }

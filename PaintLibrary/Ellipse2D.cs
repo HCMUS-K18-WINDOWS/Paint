@@ -72,20 +72,20 @@ namespace PaintLibrary
 
             if (_topLeft.X < _botRight.X)
             {
-                Canvas.SetLeft(ellipse, _topLeft.X);
+                Canvas.SetLeft(ellipse, _topLeft.X + Offset.X);
             }
             else
             {
-                Canvas.SetLeft(ellipse, _botRight.X);
+                Canvas.SetLeft(ellipse, _botRight.X + Offset.X);
             }
 
             if (_topLeft.Y < _botRight.Y)
             {
-                Canvas.SetTop(ellipse, _topLeft.Y);
+                Canvas.SetTop(ellipse, _topLeft.Y + Offset.Y);
             }
             else
             {
-                Canvas.SetTop(ellipse, _botRight.Y);
+                Canvas.SetTop(ellipse, _botRight.Y + Offset.Y);
             }
             return ellipse;
         }
@@ -148,6 +148,20 @@ namespace PaintLibrary
             Canvas.SetTop(rectangle, top);
             
             return rectangle;
+        }
+
+        public void handleMove(Point2D p)
+        {
+            Offset = p;
+        }
+
+        public void handleMoveDone()
+        {
+            _topLeft.X += Offset.X;
+            _topLeft.Y += Offset.Y;
+            _botRight.X += Offset.X;
+            _botRight.Y += Offset.Y;
+            Offset = new Point2D() { X = 0, Y = 0 };
         }
     }
 }

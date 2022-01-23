@@ -73,20 +73,20 @@ namespace PaintLibrary
 
             if (_topLeft.X < _botRight.X)
             {
-                Canvas.SetLeft(rect, _topLeft.X);
+                Canvas.SetLeft(rect, _topLeft.X + Offset.X);
             }
             else
             {
-                Canvas.SetLeft(rect, _botRight.X);
+                Canvas.SetLeft(rect, _botRight.X + Offset.X);
             }
 
             if (_topLeft.Y < _botRight.Y)
             {
-                Canvas.SetTop(rect, _topLeft.Y);
+                Canvas.SetTop(rect, _topLeft.Y + Offset.Y);
             }
             else
             {
-                Canvas.SetTop(rect, _botRight.Y);
+                Canvas.SetTop(rect, _botRight.Y + Offset.Y);
             }
             return rect;
         }
@@ -148,6 +148,20 @@ namespace PaintLibrary
             Canvas.SetTop(rectangle, top-1);
 
             return rectangle;
+        }
+
+        public void handleMove(Point2D p)
+        {
+            Offset = p;
+        }
+
+        public void handleMoveDone()
+        {
+            _topLeft.X += Offset.X;
+            _topLeft.Y += Offset.Y;
+            _botRight.X += Offset.X;
+            _botRight.Y += Offset.Y;
+            Offset = new Point2D() { X = 0, Y = 0 };
         }
     }
 }

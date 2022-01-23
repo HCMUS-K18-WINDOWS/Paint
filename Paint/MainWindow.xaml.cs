@@ -34,6 +34,8 @@ namespace Paint
         private bool _isDrawing = false;
         private bool _penMode = false;
         private bool _isSelecting = false;
+        private Point _startPosition;
+        private bool _isMoving = false;
         public MainWindow()
         {
             InitializeComponent();
@@ -161,7 +163,17 @@ namespace Paint
 
         private void Canvas_MouseUp(object sender, MouseButtonEventArgs e)
         {
+            if(_isSelecting)
+            {
+                if(selectedLayer.Value != null)
+                {
+                    _isMoving = false;
+                    selectedLayer.Value.handleMoveDone();
+                    ReDraw();
+                }
+            }
             if (!_isDrawing) return;
+           
             _isDrawing = false;
 
             // Thêm đối tượng cuối cùng vào mảng quản lí
@@ -226,6 +238,17 @@ namespace Paint
 
                 if (!_penMode) canvas.Children.Add(_preview.Draw());
                 Title = $"{pos.X} {pos.Y}";
+            }
+            if(_isSelecting)
+            {
+                if(selectedLayer.Value != null && _isMoving)
+                {
+                    Point position = e.GetPosition(canvas);
+                    double deltaY = position.Y - _startPosition.Y;
+                    double deltaX = position.X - _startPosition.X;
+                    selectedLayer.Value.handleMove(new Point2D(deltaX, deltaY));
+                    ReDraw();
+                }
             }
         }
 
@@ -379,6 +402,8 @@ namespace Paint
             if(_isSelecting)
             {
                 Point pos = e.GetPosition(canvas);
+                _startPosition = pos;
+                _isMoving = true;
                 foreach (var x in Layers)
                 {
                     if (x.Value.checkPosition(new Point2D(pos.X, pos.Y))) { 
@@ -390,7 +415,6 @@ namespace Paint
                 }
                 ReDraw();
             }
-            
         }
     }
 }

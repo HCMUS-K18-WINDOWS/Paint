@@ -11,6 +11,10 @@ namespace PaintContract
         public bool IsShow { get; set; }
         public string GetUniqueName();
         bool checkPosition(Point2D position);
+
+        void handleMove(Point2D p);
+
+        void handleMoveDone();
         UIElement Draw();
     }
 }

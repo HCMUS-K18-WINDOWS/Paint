@@ -132,5 +132,19 @@ namespace PaintLibrary
             line.Stroke = new SolidColorBrush(Colors.Blue);
             return line;
         }
+
+        public void handleMove(Point2D p)
+        {
+            Offset = p;
+        }
+
+        public void handleMoveDone()
+        {
+            _start.X += Offset.X;
+            _start.Y += Offset.Y;
+            _end.X += Offset.X;
+            _end.Y += Offset.Y;
+            Offset = new Point2D() { X = 0, Y = 0 };
+        }
     }
 }
