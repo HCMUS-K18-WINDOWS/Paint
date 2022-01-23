@@ -206,7 +206,7 @@ namespace Paint
         {
             if((selectedLayer.Value as IEditableLayer) !=null)
             {
-                canvas.Children.Add(((IEditableLayer)selectedLayer.Value).DrawRectangle());
+                canvas.Children.Add(((IEditableLayer)selectedLayer.Value).DrawBorder());
             }
         }
 
@@ -362,6 +362,16 @@ namespace Paint
         private void selectButton_Click(object sender, RoutedEventArgs e)
         {
             _isSelecting = !_isSelecting;
+            if (_isSelecting)
+            {
+                var colorBlack = new SolidColorBrush(System.Windows.Media.Color.FromRgb(0, 0, 0));
+                selectButton.Foreground = colorBlack;
+            }
+            else
+            {
+                var colorGray = new SolidColorBrush(System.Windows.Media.Colors.Gray);
+                selectButton.Foreground = colorGray;
+            }
         }
 
         private void Border_MouseLeftButtonDown(object sender, MouseButtonEventArgs e)
@@ -374,13 +384,11 @@ namespace Paint
                     if (x.Value.checkPosition(new Point2D(pos.X, pos.Y))) { 
                         selectedLayer = x;
                         //System.Windows.MessageBox.Show(selectedLayer.Key);
-                        ReDraw();
+                        
                         break;
                     }
                 }
-
-                
-                
+                ReDraw();
             }
             
         }

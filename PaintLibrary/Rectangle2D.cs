@@ -119,16 +119,35 @@ namespace PaintLibrary
             var element = this.Draw();
             var left = Canvas.GetLeft(element);
             var top = Canvas.GetTop(element);
-            var right = Canvas.GetRight(element);
-            var bottom = Canvas.GetBottom(element);
-            if (position.X < right && position.X > left && position.Y < top && position.Y > bottom)
+            var width = Math.Abs(_botRight.X - _topLeft.X);
+            var height = Math.Abs(_botRight.Y - _topLeft.Y);
+            var right = left + width;
+            var bottom = top + height;
+            if (position.X < right && position.X > left && position.Y > top && position.Y < bottom)
                 return true;
             return false;
         }
 
-        public UIElement DrawRectangle()
+        public UIElement DrawBorder()
         {
-            throw new NotImplementedException();
+            var element = this.Draw();
+            var left = Canvas.GetLeft(element);
+            var top = Canvas.GetTop(element);
+            var width = Math.Abs(_botRight.X - _topLeft.X);
+            var height = Math.Abs(_botRight.Y - _topLeft.Y);
+            //var right = left + width;
+            //var bottom = top + height;
+            var rectangle = new Rectangle()
+            {
+                Width = width + 2,
+                Height = height + 2,
+                StrokeDashArray = new DoubleCollection(new double[] { 5, 5, 1, 5 }),
+                Stroke = new SolidColorBrush(Colors.Black)
+            };
+            Canvas.SetLeft(rectangle, left-1);
+            Canvas.SetTop(rectangle, top-1);
+
+            return rectangle;
         }
     }
 }

@@ -127,7 +127,7 @@ namespace PaintLibrary
             return false;
         }
 
-        public UIElement DrawRectangle()
+        public UIElement DrawBorder()
         {
 
             var element = this.Draw();
@@ -135,8 +135,8 @@ namespace PaintLibrary
             var top = Canvas.GetTop(element);
             var width = Math.Abs(_botRight.X - _topLeft.X);
             var height = Math.Abs(_botRight.Y - _topLeft.Y);
-            var right = left + width;
-            var bottom = top + height;
+            //var right = left + width;
+            //var bottom = top + height;
             var rectangle = new Rectangle()
             {
                 Width = width,

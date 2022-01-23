@@ -9,7 +9,7 @@ namespace PaintContract
 {
     public interface IEditableLayer: ILayer
     {
-        public UIElement DrawRectangle();
+        public UIElement DrawBorder();
 
     }
 }

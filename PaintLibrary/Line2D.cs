@@ -5,6 +5,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows;
+using System.Windows.Controls;
 using System.Windows.Media;
 using System.Windows.Shapes;
 
@@ -89,12 +90,47 @@ namespace PaintLibrary
 
         public bool checkPosition(Point2D position)
         {
+            Line line = (Line)this.Draw();
+            // ax + by + c = 0
+            // a*start.x + b.start.y + c = 0
+            // a*end.x + b.end.y + c = 0
+            // y = ax + b;
+            // y1 = ax1 + b;
+            // y2 = ax2 + b;
+            // y1 - y2 = a(x1 - x2);
+            // a = (y1-y2)/(x1-x2);
+            // b = y1 - ax1;
+
+            if((_start.X <= _end.X) && (position.X > _end.X || position.X < _start.X))
+            {
+                return false;
+            }
+
+            if((_start.X > _end.X) && (position.X < _end.X || position.X > _start.X))
+            {
+                return false;
+            }
+
+            var a = (_start.Y - _end.Y)/(_start.X - _end.X);
+            var b = -1;
+            var c = _start.Y - a * _start.X;
+
+            // distance
+            // y = 3x + 2 => 3x - y +2 = 0;
+            var distance = Math.Abs(a*position.X + b*position.Y + c)/Math.Sqrt((a*a + b*b));
+            if(distance <= this.Thickness /2)
+            {
+                return true;
+            }
             return false;
         }
 
-        public UIElement DrawRectangle()
+        public UIElement DrawBorder()
         {
-            throw new NotImplementedException();
+            Line line = (Line)this.Draw();
+            line.StrokeDashArray = new DoubleCollection(new double[] { 2, 4 });
+            line.Stroke = new SolidColorBrush(Colors.Blue);
+            return line;
         }
     }
 }
