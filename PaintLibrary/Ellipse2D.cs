@@ -137,12 +137,17 @@ namespace PaintLibrary
             var height = Math.Abs(_botRight.Y - _topLeft.Y);
             var right = left + width;
             var bottom = top + height;
-            var Rectangle = new Rectangle()
+            var rectangle = new Rectangle()
             {
+                Width = width,
+                Height = height,
                 StrokeDashArray = new DoubleCollection(new double[] { 5, 5, 1, 5 }),
                 Stroke = new SolidColorBrush(Colors.Black)
             };
-            return Rectangle;
+            Canvas.SetLeft(rectangle, left);
+            Canvas.SetTop(rectangle, top);
+            
+            return rectangle;
         }
     }
 }

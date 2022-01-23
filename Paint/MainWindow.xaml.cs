@@ -374,9 +374,12 @@ namespace Paint
                     if (x.Value.checkPosition(new Point2D(pos.X, pos.Y))) { 
                         selectedLayer = x;
                         //System.Windows.MessageBox.Show(selectedLayer.Key);
+                        ReDraw();
                         break;
                     }
                 }
+
+                
                 
             }
             
