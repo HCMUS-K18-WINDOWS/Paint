@@ -88,7 +88,7 @@ namespace PaintLibrary
             return Name + ++numberOfInstances;
         }
 
-        public bool checkPosition(Point2D position)
+        public int checkPosition(Point2D position)
         {
             Line line = (Line)this.Draw();
             // ax + by + c = 0
@@ -103,12 +103,12 @@ namespace PaintLibrary
 
             if((_start.X <= _end.X) && (position.X > _end.X || position.X < _start.X))
             {
-                return false;
+                return 0;
             }
 
             if((_start.X > _end.X) && (position.X < _end.X || position.X > _start.X))
             {
-                return false;
+                return 0;
             }
 
             var a = (_start.Y - _end.Y)/(_start.X - _end.X);
@@ -120,9 +120,9 @@ namespace PaintLibrary
             var distance = Math.Abs(a*position.X + b*position.Y + c)/Math.Sqrt((a*a + b*b));
             if(distance <= this.Thickness /2)
             {
-                return true;
+                return 1;
             }
-            return false;
+            return 0;
         }
 
         public UIElement DrawBorder()

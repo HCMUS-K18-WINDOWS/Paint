@@ -241,13 +241,41 @@ namespace Paint
             }
             if(_isSelecting)
             {
-                if(selectedLayer.Value != null && _isMoving)
+                Point position = e.GetPosition(canvas);
+                if (selectedLayer.Value != null && _isMoving)
                 {
-                    Point position = e.GetPosition(canvas);
                     double deltaY = position.Y - _startPosition.Y;
                     double deltaX = position.X - _startPosition.X;
                     selectedLayer.Value.handleMove(new Point2D(deltaX, deltaY));
                     ReDraw();
+                }
+
+                int hoverType = 0;
+                foreach (var x in Layers)
+                {
+                    if (x.Value.checkPosition(new Point2D(position.X, position.Y)) != 0)
+                    {
+                        hoverType = x.Value.checkPosition(new Point2D(position.X, position.Y));
+                        break;
+                    }
+                }
+                switch(hoverType)
+                {
+                    case 1:
+                        Mouse.OverrideCursor = System.Windows.Input.Cursors.SizeAll;
+                        break;
+                    case 2:
+                        Mouse.OverrideCursor = System.Windows.Input.Cursors.SizeWE;
+                        break;
+                    case 3:
+                        Mouse.OverrideCursor = System.Windows.Input.Cursors.SizeNS;
+                        break;
+                    case 4:
+                        Mouse.OverrideCursor = System.Windows.Input.Cursors.SizeNESW;
+                        break;
+                    default:
+                        Mouse.OverrideCursor = System.Windows.Input.Cursors.Arrow;
+                        break;
                 }
             }
         }
@@ -406,7 +434,7 @@ namespace Paint
                 _isMoving = true;
                 foreach (var x in Layers)
                 {
-                    if (x.Value.checkPosition(new Point2D(pos.X, pos.Y))) { 
+                    if (x.Value.checkPosition(new Point2D(pos.X, pos.Y)) == 1) { 
                         selectedLayer = x;
                         //System.Windows.MessageBox.Show(selectedLayer.Key);
                         

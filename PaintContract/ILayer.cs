@@ -10,7 +10,7 @@ namespace PaintContract
         Point2D Offset { get; set; }
         public bool IsShow { get; set; }
         public string GetUniqueName();
-        bool checkPosition(Point2D position);
+        int checkPosition(Point2D position);  //  0 out,  1 in, 2 above x, 3 above y, 4 corner
 
         void handleMove(Point2D p);
 

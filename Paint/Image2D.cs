@@ -51,7 +51,7 @@ namespace Paint
             return Name + ++numberOfInstances;
         }
 
-        public bool checkPosition(Point2D position)
+        public int checkPosition(Point2D position)
         {
             var element = this.Draw();
             var left = Canvas.GetLeft(element);
@@ -59,8 +59,8 @@ namespace Paint
             var right = Canvas.GetRight(element);
             var bottom = Canvas.GetBottom(element);
             if (position.X < right && position.X > left && position.Y < top && position.Y > bottom)
-                return true;
-            return false;
+                return 1;
+            return 0;
         }
 
         public void handleMove(Point2D p)

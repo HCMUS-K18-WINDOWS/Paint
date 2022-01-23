@@ -7,6 +7,7 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
+using System.Windows.Input;
 using System.Windows.Media;
 using System.Windows.Shapes;
 
@@ -113,7 +114,7 @@ namespace PaintLibrary
             };
         }
 
-        public bool checkPosition(Point2D position)
+        public int checkPosition(Point2D position)
         {
             var element = this.Draw();
             var left = Canvas.GetLeft(element);
@@ -123,13 +124,26 @@ namespace PaintLibrary
             var right = left + width;
             var bottom = top + height;
             if(position.X<right && position.X>left && position.Y>top && position.Y<bottom)
-                return true;
-            return false;
+            {
+                return 1;
+            }
+            if (position.Y < bottom && position.Y > top && (position.X == left || position.X == right))
+            {
+                return 2;
+            }
+            if (position.X < right && position.X > left && (position.Y == top || position.Y == bottom))
+            {
+                return 3;
+            }
+            if((position.Y == top || position.Y == bottom) && (position.X == left || position.X == right))
+            {
+                return 4;
+            }
+            return 0;
         }
 
         public UIElement DrawBorder()
         {
-
             var element = this.Draw();
             var left = Canvas.GetLeft(element);
             var top = Canvas.GetTop(element);
@@ -144,6 +158,7 @@ namespace PaintLibrary
                 StrokeDashArray = new DoubleCollection(new double[] { 5, 5, 1, 5 }),
                 Stroke = new SolidColorBrush(Colors.Black)
             };
+
             Canvas.SetLeft(rectangle, left);
             Canvas.SetTop(rectangle, top);
             
