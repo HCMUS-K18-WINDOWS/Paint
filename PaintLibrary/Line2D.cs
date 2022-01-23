@@ -86,5 +86,15 @@ namespace PaintLibrary
         {
             return Name + ++numberOfInstances;
         }
+
+        public bool checkPosition(Point2D position)
+        {
+            return false;
+        }
+
+        public UIElement DrawRectangle()
+        {
+            throw new NotImplementedException();
+        }
     }
 }

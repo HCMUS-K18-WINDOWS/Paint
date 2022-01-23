@@ -13,7 +13,7 @@ namespace PaintContract
         DASHDOT,
     }
 
-    public interface IShape : ILayer
+    public interface IShape : IEditableLayer
     {
         public StrokeType Stroke { get; set; }
         public double Thickness { get; set; }

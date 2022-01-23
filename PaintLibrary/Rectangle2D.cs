@@ -35,6 +35,7 @@ namespace PaintLibrary
             IsShow = true;
         }
 
+
         public object Clone()
         {
             return this.MemberwiseClone();
@@ -113,5 +114,21 @@ namespace PaintLibrary
             return Name + ++_numberOfInstances;
         }
 
+        public bool checkPosition(Point2D position)
+        {
+            var element = this.Draw();
+            var left = Canvas.GetLeft(element);
+            var top = Canvas.GetTop(element);
+            var right = Canvas.GetRight(element);
+            var bottom = Canvas.GetBottom(element);
+            if (position.X < right && position.X > left && position.Y < top && position.Y > bottom)
+                return true;
+            return false;
+        }
+
+        public UIElement DrawRectangle()
+        {
+            throw new NotImplementedException();
+        }
     }
 }

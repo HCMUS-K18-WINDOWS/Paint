@@ -28,6 +28,7 @@ namespace Paint
     {
         //public Dictionary<string, ILayer> Layers { get; set; }
         public ObservableCollection<KeyValuePair<string, ILayer>> Layers { get; set; }
+        public KeyValuePair<string, ILayer>  selectedLayer { get; set; }
         public Dictionary<string, ILayer> PenLines { get; set; }
         IShape _preview;
         private bool _isDrawing = false;
@@ -198,6 +199,15 @@ namespace Paint
                 if (element == null) continue;
                 canvas.Children.Add(element);
             }
+            DrawRectangleBorder();
+        }
+
+        private void DrawRectangleBorder()
+        {
+            if((selectedLayer.Value as IEditableLayer) !=null)
+            {
+                canvas.Children.Add(((IEditableLayer)selectedLayer.Value).DrawRectangle());
+            }
         }
 
         private void Canvas_MouseMove(object sender, System.Windows.Input.MouseEventArgs e)
@@ -358,8 +368,18 @@ namespace Paint
         {
             if(_isSelecting)
             {
+                Point pos = e.GetPosition(canvas);
+                foreach (var x in Layers)
+                {
+                    if (x.Value.checkPosition(new Point2D(pos.X, pos.Y))) { 
+                        selectedLayer = x;
+                        //System.Windows.MessageBox.Show(selectedLayer.Key);
+                        break;
+                    }
+                }
                 
             }
+            
         }
     }
 }

@@ -112,5 +112,37 @@ namespace PaintLibrary
                 Y = _y
             };
         }
+
+        public bool checkPosition(Point2D position)
+        {
+            var element = this.Draw();
+            var left = Canvas.GetLeft(element);
+            var top = Canvas.GetTop(element);
+            var width = Math.Abs(_botRight.X - _topLeft.X);
+            var height = Math.Abs(_botRight.Y - _topLeft.Y);
+            var right = left + width;
+            var bottom = top + height;
+            if(position.X<right && position.X>left && position.Y>top && position.Y<bottom)
+                return true;
+            return false;
+        }
+
+        public UIElement DrawRectangle()
+        {
+
+            var element = this.Draw();
+            var left = Canvas.GetLeft(element);
+            var top = Canvas.GetTop(element);
+            var width = Math.Abs(_botRight.X - _topLeft.X);
+            var height = Math.Abs(_botRight.Y - _topLeft.Y);
+            var right = left + width;
+            var bottom = top + height;
+            var Rectangle = new Rectangle()
+            {
+                StrokeDashArray = new DoubleCollection(new double[] { 5, 5, 1, 5 }),
+                Stroke = new SolidColorBrush(Colors.Black)
+            };
+            return Rectangle;
+        }
     }
 }
