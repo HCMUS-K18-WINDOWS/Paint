@@ -67,6 +67,9 @@
                     <ComboBoxItem
         Content="{materialDesign:PackIcon Kind=TriangleOutline}" />-->
                 </ComboBox>
+                <Button x:Name="selectButton" Click="selectButton_Click" Foreground="Gray" Margin="0,0,10,0" Width="20" Height="20" Style="{StaticResource MaterialDesignFloatingActionMiniAccentButton}"  Background="{x:Null}" BorderBrush="{x:Null}">
+                    <materialDesign:PackIcon Kind="CursorDefault" Width="20" Height="20" VerticalAlignment="Center" HorizontalAlignment="Center"/>
+                </Button>
                 <Button x:Name="brushButton" Click="Brush_Button_Click" Foreground="Gray" Margin="0,0,10,0" Width="20" Height="20" Style="{StaticResource MaterialDesignFloatingActionMiniAccentButton}"  Background="{x:Null}" BorderBrush="{x:Null}">
                     <materialDesign:PackIcon Kind="Brush" Width="20" Height="20" VerticalAlignment="Center" HorizontalAlignment="Center"/>
                 </Button>
@@ -113,13 +116,15 @@
             
              <Grid x:Name="grid" Grid.Column="0"  ClipToBounds="True" >
 
-                <Canvas x:Name="canvas" Grid.ColumnSpan="2">
+                <Canvas x:Name="canvas" Background="Transparent" MouseDown="Canvas_MouseDown" MouseUp="Canvas_MouseUp"
+                           MouseWheel="canvas_MouseWheel" MouseMove="Canvas_MouseMove" Grid.ColumnSpan="2">
                     <Canvas.RenderTransform>
                         <MatrixTransform/>
                     </Canvas.RenderTransform>
                 </Canvas>
                 <Border Background="Transparent" MouseDown="Canvas_MouseDown" MouseUp="Canvas_MouseUp"
-                           MouseWheel="canvas_MouseWheel" MouseMove="Canvas_MouseMove" Grid.ColumnSpan="2">
+                       MouseLeftButtonDown="Border_MouseLeftButtonDown"  MouseWheel="canvas_MouseWheel" MouseMove="Canvas_MouseMove" Grid.ColumnSpan="2"
+                        >
                 </Border>
             </Grid>
             

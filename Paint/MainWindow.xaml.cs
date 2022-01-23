@@ -32,6 +32,7 @@ namespace Paint
         IShape _preview;
         private bool _isDrawing = false;
         private bool _penMode = false;
+        private bool _isSelecting = false;
         public MainWindow()
         {
             InitializeComponent();
@@ -147,6 +148,7 @@ namespace Paint
 
         private void Canvas_MouseDown(object sender, MouseButtonEventArgs e)
         {
+            if (_isSelecting) return;
             _isDrawing = true;
             Point pos = e.GetPosition(canvas);
             if (_penMode)
@@ -347,6 +349,17 @@ namespace Paint
             }
         }
 
-        
+        private void selectButton_Click(object sender, RoutedEventArgs e)
+        {
+            _isSelecting = !_isSelecting;
+        }
+
+        private void Border_MouseLeftButtonDown(object sender, MouseButtonEventArgs e)
+        {
+            if(_isSelecting)
+            {
+                
+            }
+        }
     }
 }

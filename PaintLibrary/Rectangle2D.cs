@@ -112,5 +112,6 @@ namespace PaintLibrary
         {
             return Name + ++_numberOfInstances;
         }
+
     }
 }
