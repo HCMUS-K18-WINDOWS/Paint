@@ -249,8 +249,70 @@ namespace PaintLibrary
                     }
                     break;
                 case CursorState.CornerTopRight:
+                    if (_topLeft.X < _botRight.X && _topLeft.Y < _botRight.Y)
+                    {
+                        _topLeft.Y += deltaY;
+                        _botRight.X += deltaX;
+                    }
+                    else if (_topLeft.X > _botRight.X && _topLeft.Y > _botRight.Y)
+                    {
+                        _topLeft.X += deltaX;
+                        _botRight.Y += deltaY;
+                    }
+                    else if (_topLeft.X > _botRight.X && _topLeft.Y < _botRight.Y)
+                    {
+                        _topLeft.X += deltaX;
+                        _topLeft.Y += deltaY;
+                    }
+                    else if (_topLeft.X < _botRight.X && _topLeft.Y > _botRight.Y)
+                    {
+                        _botRight.X += deltaX;
+                        _botRight.Y += deltaY;
+                    }
+                    break;
                 case CursorState.CornerBottomLeft:
+                    if (_topLeft.X < _botRight.X && _topLeft.Y < _botRight.Y)
+                    {
+                        _topLeft.X += deltaX;
+                        _botRight.Y += deltaY;
+                    }
+                    else if (_topLeft.X > _botRight.X && _topLeft.Y > _botRight.Y)
+                    {
+                        _topLeft.Y += deltaY;
+                        _botRight.X += deltaX;
+                    }
+                    else if (_topLeft.X > _botRight.X && _topLeft.Y < _botRight.Y)
+                    {
+                        _botRight.X += deltaX;
+                        _botRight.Y += deltaY;
+                    }
+                    else if (_topLeft.X < _botRight.X && _topLeft.Y > _botRight.Y)
+                    {
+                        _topLeft.X += deltaX;
+                        _topLeft.Y += deltaY;
+                    }
+                    break;
                 case CursorState.CornerBottomRight:
+                    if (_topLeft.X < _botRight.X && _topLeft.Y < _botRight.Y)
+                    {
+                        _botRight.X += deltaX;
+                        _botRight.Y += deltaY;
+                    }
+                    else if (_topLeft.X > _botRight.X && _topLeft.Y > _botRight.Y)
+                    {
+                        _topLeft.X += deltaX;
+                        _topLeft.Y += deltaY;
+                    }
+                    else if (_topLeft.X > _botRight.X && _topLeft.Y < _botRight.Y)
+                    {
+                        _topLeft.X += deltaX;
+                        _botRight.Y += deltaY;
+                    }
+                    else if (_topLeft.X < _botRight.X && _topLeft.Y > _botRight.Y)
+                    {
+                        _botRight.X += deltaX;
+                        _topLeft.Y += deltaY;
+                    }
                     break;
                 default:
                     break;
