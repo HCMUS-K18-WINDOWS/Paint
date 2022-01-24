@@ -165,6 +165,11 @@ namespace Paint
 
         private void Canvas_MouseUp(object sender, MouseButtonEventArgs e)
         {
+            if(_isResizing)
+            {
+                _isResizing = false;
+                return;
+            }
             if(_isSelecting)
             {
                 if(selectedLayer.Value != null)
@@ -253,17 +258,20 @@ namespace Paint
                     ReDraw();
                 }
 
+                var currentDirection = CursorState.Out;
                 // change cursor type
                 foreach (var x in Layers)
                 {
                     if (x.Value.checkPosition(new Point2D(position.X, position.Y)) != CursorState.Out)
                     {
-                        _direction = x.Value.checkPosition(new Point2D(position.X, position.Y));
+                        currentDirection = x.Value.checkPosition(new Point2D(position.X, position.Y));
                         break;
                     }
                 }
 
-                switch(_direction)
+                double delta = 0;
+
+                switch (currentDirection)
                 {
                     case CursorState.In:
                         Mouse.OverrideCursor = System.Windows.Input.Cursors.SizeAll;
@@ -279,9 +287,31 @@ namespace Paint
                     case CursorState.Corner:
                         Mouse.OverrideCursor = System.Windows.Input.Cursors.SizeNESW;
                         break;
+                    case CursorState.Out:
+                        Mouse.OverrideCursor = System.Windows.Input.Cursors.Arrow;
+                        break;
                     default:
                         Mouse.OverrideCursor = System.Windows.Input.Cursors.Arrow;
                         break;
+                }
+
+                switch (_direction)
+                {
+                    case CursorState.Left:
+                    case CursorState.Right:
+                        delta = position.X - _startPosition.X;
+                        break;
+                    case CursorState.Top:
+                    case CursorState.Bottom:
+                        delta = position.Y - _startPosition.Y;
+                        break;
+                }
+
+                if (_isResizing)
+                {
+                    selectedLayer.Value.handleResize(_direction, delta);
+                    _startPosition = position;
+                    ReDraw();
                 }
             }
         }
@@ -443,40 +473,26 @@ namespace Paint
                 bool isSelectNone = true;
                 foreach (var x in Layers)
                 {
-                    switch(x.Value.checkPosition(new Point2D(pos.X, pos.Y)))
+                    var Currentdirection = x.Value.checkPosition(new Point2D(pos.X, pos.Y));
+                    if(Currentdirection != CursorState.Out)
                     {
-                        case CursorState.Out:
-                            break;
-                        case CursorState.In:
-                            selectedLayer = x;
-                            _isMoving = true;
-                            isSelectNone = false;
-                            break;
-                        case CursorState.Left:
-                            selectedLayer = x;
-                            _isResizing = true;
-                            isSelectNone = false;
-                            _direction = CursorState.Left;
-                            break;
-                        case CursorState.Right:
-                            selectedLayer = x;
-                            _isResizing = true;
-                            isSelectNone = false;
-                            _direction = CursorState.Right;
-                            break;
-                        case CursorState.Top:
-                            selectedLayer = x;
-                            _isResizing = true;
-                            isSelectNone = false;
-                            _direction = CursorState.Top;
-                            break;
-                        case CursorState.Bottom:
-                            selectedLayer = x;
-                            _isResizing = true;
-                            isSelectNone = false;
-                            _direction = CursorState.Bottom;
-                            break;
+                        switch (Currentdirection)
+                        {
+                            case CursorState.In:
+                                selectedLayer = x;
+                                _isMoving = true;
+                                isSelectNone = false;
+                                break;
+                            default:
+                                selectedLayer = x;
+                                _isResizing = true;
+                                isSelectNone = false;
+                                _direction = Currentdirection;
+                                break;
+                        }
+                        break;
                     }
+               
                 }
                 if(isSelectNone)
                 {

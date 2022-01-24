@@ -194,10 +194,22 @@ namespace PaintLibrary
                         _botRight.X += delta;
                     break;
                 case CursorState.Right:
+                    if (_topLeft.X < _botRight.X)
+                        _botRight.X += delta;
+                    else
+                        _topLeft.X += delta;
                     break;
                 case CursorState.Top:
+                    if (_topLeft.Y < _botRight.Y)
+                        _topLeft.Y += delta;
+                    else
+                        _botRight.Y += delta;
                     break;
                 case CursorState.Bottom:
+                    if (_topLeft.Y < _botRight.Y)
+                        _botRight.Y += delta;
+                    else
+                        _topLeft.Y += delta;
                     break;
                 default:
                     break;

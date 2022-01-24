@@ -92,15 +92,6 @@ namespace PaintLibrary
         public CursorState checkPosition(Point2D position)
         {
             Line line = (Line)this.Draw();
-            // ax + by + c = 0
-            // a*start.x + b.start.y + c = 0
-            // a*end.x + b.end.y + c = 0
-            // y = ax + b;
-            // y1 = ax1 + b;
-            // y2 = ax2 + b;
-            // y1 - y2 = a(x1 - x2);
-            // a = (y1-y2)/(x1-x2);
-            // b = y1 - ax1;
 
             if((_start.X <= _end.X) && (position.X > _end.X || position.X < _start.X))
             {
@@ -150,7 +141,10 @@ namespace PaintLibrary
 
         public void handleResize(CursorState direction, double delta)
         {
-            throw new NotImplementedException();
+            switch (direction) { 
+                
+            }
+            
         }
     }
 }
