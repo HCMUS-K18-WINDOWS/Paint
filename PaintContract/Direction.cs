@@ -14,6 +14,11 @@ namespace Paint
         Right,
         Top,
         Bottom,
-        Corner
+        Start,
+        End,
+        CornerTopLeft,
+        CornerTopRight,
+        CornerBottomLeft,
+        CornerBottomRight,
     }
 }

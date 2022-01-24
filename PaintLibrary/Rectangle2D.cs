@@ -36,7 +36,6 @@ namespace PaintLibrary
             IsShow = true;
         }
 
-
         public object Clone()
         {
             return this.MemberwiseClone();
@@ -140,9 +139,21 @@ namespace PaintLibrary
                 if (position.Y == bottom)
                     return CursorState.Bottom;
             }
-            if ((position.Y == top || position.Y == bottom) && (position.X == left || position.X == right))
+            if(position.Y == top && position.X == left )
             {
-                return CursorState.Corner;
+                return CursorState.CornerTopLeft;
+            }
+            if (position.Y == top && position.X == right)
+            {
+                return CursorState.CornerTopRight;
+            }
+            if (position.Y == bottom && position.X == left)
+            {
+                return CursorState.CornerBottomLeft;
+            }
+            if (position.Y == bottom && position.X == right)
+            {
+                return CursorState.CornerBottomRight;
             }
             return CursorState.Out;
         }
@@ -183,33 +194,58 @@ namespace PaintLibrary
             Offset = new Point2D() { X = 0, Y = 0 };
         }
 
-        public void handleResize(CursorState direction, double delta)
+        public void handleResize(CursorState direction, double deltaX, double deltaY)
         {
             switch(direction)
             {
                 case CursorState.Left:
                     if (_topLeft.X < _botRight.X)
-                        _topLeft.X += delta;
+                        _topLeft.X += deltaX;
                     else
-                        _botRight.X += delta;
+                        _botRight.X += deltaX;
                     break;
                 case CursorState.Right:
                     if (_topLeft.X < _botRight.X)
-                        _botRight.X += delta;
+                        _botRight.X += deltaX;
                     else
-                        _topLeft.X += delta;
+                        _topLeft.X += deltaX;
                     break;
                 case CursorState.Top:
                     if (_topLeft.Y < _botRight.Y)
-                        _topLeft.Y += delta;
+                        _topLeft.Y += deltaY;
                     else
-                        _botRight.Y += delta;
+                        _botRight.Y += deltaY;
                     break;
                 case CursorState.Bottom:
                     if (_topLeft.Y < _botRight.Y)
-                        _botRight.Y += delta;
+                        _botRight.Y += deltaY;
                     else
-                        _topLeft.Y += delta;
+                        _topLeft.Y += deltaY;
+                    break;
+                case CursorState.CornerTopLeft:
+                    //start is topleft
+                    if(_topLeft.X < _botRight.X && _topLeft.Y < _botRight.Y)
+                    {
+                        _topLeft.X += deltaX;
+                        _topLeft.Y += deltaY;
+                    } else if(_topLeft.X > _botRight.X && _topLeft.Y > _botRight.Y)
+                    {
+                        // end is topleft
+                        _botRight.X += deltaX;
+                        _botRight.Y += deltaY;
+                    } else if(_topLeft.X > _botRight.X && _topLeft.Y < _botRight.Y)
+                    {
+                        _topLeft.Y += deltaY;
+                        _botRight.X += deltaX;
+                    } else if(_topLeft.X < _botRight.X && _topLeft.Y > _botRight.Y)
+                    {
+                        _topLeft.X += deltaX;
+                        _botRight.Y += deltaY;
+                    }
+                    break;
+                case CursorState.CornerTopRight:
+                case CursorState.CornerBottomLeft:
+                case CursorState.CornerBottomRight:
                     break;
                 default:
                     break;

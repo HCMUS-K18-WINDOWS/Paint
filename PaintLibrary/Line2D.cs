@@ -103,6 +103,15 @@ namespace PaintLibrary
                 return CursorState.Out;
             }
 
+            if(_start.X == position.X && _start.Y == position.Y)
+            {
+                return CursorState.Start;
+            }
+            if(_end.X == position.X && _end.Y == position.Y)
+            {
+                return CursorState.End;
+            }
+
             var a = (_start.Y - _end.Y)/(_start.X - _end.X);
             var b = -1;
             var c = _start.Y - a * _start.X;
@@ -139,12 +148,9 @@ namespace PaintLibrary
             Offset = new Point2D() { X = 0, Y = 0 };
         }
 
-        public void handleResize(CursorState direction, double delta)
+        public void handleResize(CursorState direction, double deltaX, double deltaY)
         {
-            switch (direction) { 
-                
-            }
-            
+            throw new NotImplementedException();
         }
     }
 }

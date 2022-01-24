@@ -250,10 +250,11 @@ namespace Paint
             {
                 // handle move object
                 Point position = e.GetPosition(canvas);
+                double deltaY = position.Y - _startPosition.Y;
+                double deltaX = position.X - _startPosition.X;
                 if (selectedLayer.Value != null && _isMoving)
                 {
-                    double deltaY = position.Y - _startPosition.Y;
-                    double deltaX = position.X - _startPosition.X;
+                    
                     selectedLayer.Value.handleMove(new Point2D(deltaX, deltaY));
                     ReDraw();
                 }
@@ -284,7 +285,12 @@ namespace Paint
                     case CursorState.Bottom:
                         Mouse.OverrideCursor = System.Windows.Input.Cursors.SizeNS;
                         break;
-                    case CursorState.Corner:
+                    case CursorState.CornerTopLeft:
+                    case CursorState.CornerBottomRight:
+                        Mouse.OverrideCursor = System.Windows.Input.Cursors.SizeNWSE;
+                        break;
+                    case CursorState.CornerBottomLeft:
+                    case CursorState.CornerTopRight:
                         Mouse.OverrideCursor = System.Windows.Input.Cursors.SizeNESW;
                         break;
                     case CursorState.Out:
@@ -295,21 +301,9 @@ namespace Paint
                         break;
                 }
 
-                switch (_direction)
-                {
-                    case CursorState.Left:
-                    case CursorState.Right:
-                        delta = position.X - _startPosition.X;
-                        break;
-                    case CursorState.Top:
-                    case CursorState.Bottom:
-                        delta = position.Y - _startPosition.Y;
-                        break;
-                }
-
                 if (_isResizing)
                 {
-                    selectedLayer.Value.handleResize(_direction, delta);
+                    selectedLayer.Value.handleResize(_direction, deltaX, deltaY);
                     _startPosition = position;
                     ReDraw();
                 }

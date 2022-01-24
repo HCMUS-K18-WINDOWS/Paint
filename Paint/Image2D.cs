@@ -66,7 +66,7 @@ namespace Paint
             throw new NotImplementedException();
         }
 
-        public void handleResize(CursorState direction, double delta)
+        public void handleResize(CursorState direction, double deltaX, double deltaY)
         {
             throw new NotImplementedException();
         }

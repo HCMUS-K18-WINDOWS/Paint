@@ -17,7 +17,7 @@ namespace PaintContract
 
         void handleMoveDone();
 
-        void handleResize(CursorState direction, double delta);
+        void handleResize(CursorState direction, double deltaX, double deltaY);
         UIElement Draw();
     }
 }
