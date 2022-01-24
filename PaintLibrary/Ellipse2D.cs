@@ -1,4 +1,5 @@
-﻿using PaintContract;
+﻿using Paint;
+using PaintContract;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -114,7 +115,7 @@ namespace PaintLibrary
             };
         }
 
-        public int checkPosition(Point2D position)
+        public CursorState checkPosition(Point2D position)
         {
             var element = this.Draw();
             var left = Canvas.GetLeft(element);
@@ -123,23 +124,27 @@ namespace PaintLibrary
             var height = Math.Abs(_botRight.Y - _topLeft.Y);
             var right = left + width;
             var bottom = top + height;
-            if(position.X<right && position.X>left && position.Y>top && position.Y<bottom)
+            if (position.X < right && position.X > left && position.Y > top && position.Y < bottom)
+                return CursorState.In;
+            if (position.Y < bottom && position.Y > top)
             {
-                return 1;
+                if (position.X == left)
+                    return CursorState.Left;
+                if (position.X == right)
+                    return CursorState.Right;
             }
-            if (position.Y < bottom && position.Y > top && (position.X == left || position.X == right))
+            if (position.X < right && position.X > left)
             {
-                return 2;
+                if (position.Y == top)
+                    return CursorState.Top;
+                if (position.Y == bottom)
+                    return CursorState.Bottom;
             }
-            if (position.X < right && position.X > left && (position.Y == top || position.Y == bottom))
+            if ((position.Y == top || position.Y == bottom) && (position.X == left || position.X == right))
             {
-                return 3;
+                return CursorState.Corner;
             }
-            if((position.Y == top || position.Y == bottom) && (position.X == left || position.X == right))
-            {
-                return 4;
-            }
-            return 0;
+            return CursorState.Out;
         }
 
         public UIElement DrawBorder()
@@ -177,6 +182,11 @@ namespace PaintLibrary
             _botRight.X += Offset.X;
             _botRight.Y += Offset.Y;
             Offset = new Point2D() { X = 0, Y = 0 };
+        }
+
+        public void handleResize(CursorState direction, double delta)
+        {
+            throw new NotImplementedException();
         }
     }
 }

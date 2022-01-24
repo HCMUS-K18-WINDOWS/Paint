@@ -51,16 +51,9 @@ namespace Paint
             return Name + ++numberOfInstances;
         }
 
-        public int checkPosition(Point2D position)
+        public CursorState checkPosition(Point2D position)
         {
-            var element = this.Draw();
-            var left = Canvas.GetLeft(element);
-            var top = Canvas.GetTop(element);
-            var right = Canvas.GetRight(element);
-            var bottom = Canvas.GetBottom(element);
-            if (position.X < right && position.X > left && position.Y < top && position.Y > bottom)
-                return 1;
-            return 0;
+            throw new NotImplementedException();
         }
 
         public void handleMove(Point2D p)
@@ -68,12 +61,12 @@ namespace Paint
             throw new NotImplementedException();
         }
 
-        public void handleMoveDone(Point2D p)
+        public void handleMoveDone()
         {
             throw new NotImplementedException();
         }
 
-        public void handleMoveDone()
+        public void handleResize(CursorState direction, double delta)
         {
             throw new NotImplementedException();
         }

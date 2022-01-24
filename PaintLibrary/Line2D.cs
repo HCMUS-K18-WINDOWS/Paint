@@ -1,4 +1,5 @@
-﻿using PaintContract;
+﻿using Paint;
+using PaintContract;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -88,7 +89,7 @@ namespace PaintLibrary
             return Name + ++numberOfInstances;
         }
 
-        public int checkPosition(Point2D position)
+        public CursorState checkPosition(Point2D position)
         {
             Line line = (Line)this.Draw();
             // ax + by + c = 0
@@ -103,12 +104,12 @@ namespace PaintLibrary
 
             if((_start.X <= _end.X) && (position.X > _end.X || position.X < _start.X))
             {
-                return 0;
+                return CursorState.Out;
             }
 
             if((_start.X > _end.X) && (position.X < _end.X || position.X > _start.X))
             {
-                return 0;
+                return CursorState.Out;
             }
 
             var a = (_start.Y - _end.Y)/(_start.X - _end.X);
@@ -120,9 +121,9 @@ namespace PaintLibrary
             var distance = Math.Abs(a*position.X + b*position.Y + c)/Math.Sqrt((a*a + b*b));
             if(distance <= this.Thickness /2)
             {
-                return 1;
+                return CursorState.In;
             }
-            return 0;
+            return CursorState.Out;
         }
 
         public UIElement DrawBorder()
@@ -145,6 +146,11 @@ namespace PaintLibrary
             _end.X += Offset.X;
             _end.Y += Offset.Y;
             Offset = new Point2D() { X = 0, Y = 0 };
+        }
+
+        public void handleResize(CursorState direction, double delta)
+        {
+            throw new NotImplementedException();
         }
     }
 }

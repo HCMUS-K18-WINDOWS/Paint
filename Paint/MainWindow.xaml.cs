@@ -36,6 +36,8 @@ namespace Paint
         private bool _isSelecting = false;
         private Point _startPosition;
         private bool _isMoving = false;
+        private bool _isResizing = false;
+        private CursorState _direction = CursorState.Out;
         public MainWindow()
         {
             InitializeComponent();
@@ -241,6 +243,7 @@ namespace Paint
             }
             if(_isSelecting)
             {
+                // handle move object
                 Point position = e.GetPosition(canvas);
                 if (selectedLayer.Value != null && _isMoving)
                 {
@@ -250,27 +253,30 @@ namespace Paint
                     ReDraw();
                 }
 
-                int hoverType = 0;
+                // change cursor type
                 foreach (var x in Layers)
                 {
-                    if (x.Value.checkPosition(new Point2D(position.X, position.Y)) != 0)
+                    if (x.Value.checkPosition(new Point2D(position.X, position.Y)) != CursorState.Out)
                     {
-                        hoverType = x.Value.checkPosition(new Point2D(position.X, position.Y));
+                        _direction = x.Value.checkPosition(new Point2D(position.X, position.Y));
                         break;
                     }
                 }
-                switch(hoverType)
+
+                switch(_direction)
                 {
-                    case 1:
+                    case CursorState.In:
                         Mouse.OverrideCursor = System.Windows.Input.Cursors.SizeAll;
                         break;
-                    case 2:
+                    case CursorState.Left:
+                    case CursorState.Right:
                         Mouse.OverrideCursor = System.Windows.Input.Cursors.SizeWE;
                         break;
-                    case 3:
+                    case CursorState.Top:
+                    case CursorState.Bottom:
                         Mouse.OverrideCursor = System.Windows.Input.Cursors.SizeNS;
                         break;
-                    case 4:
+                    case CursorState.Corner:
                         Mouse.OverrideCursor = System.Windows.Input.Cursors.SizeNESW;
                         break;
                     default:
@@ -422,6 +428,8 @@ namespace Paint
             {
                 var colorGray = new SolidColorBrush(System.Windows.Media.Colors.Gray);
                 selectButton.Foreground = colorGray;
+                selectedLayer = new KeyValuePair<string, ILayer>();
+                ReDraw();
             }
         }
 
@@ -431,15 +439,48 @@ namespace Paint
             {
                 Point pos = e.GetPosition(canvas);
                 _startPosition = pos;
-                _isMoving = true;
+                
+                bool isSelectNone = true;
                 foreach (var x in Layers)
                 {
-                    if (x.Value.checkPosition(new Point2D(pos.X, pos.Y)) == 1) { 
-                        selectedLayer = x;
-                        //System.Windows.MessageBox.Show(selectedLayer.Key);
-                        
-                        break;
+                    switch(x.Value.checkPosition(new Point2D(pos.X, pos.Y)))
+                    {
+                        case CursorState.Out:
+                            break;
+                        case CursorState.In:
+                            selectedLayer = x;
+                            _isMoving = true;
+                            isSelectNone = false;
+                            break;
+                        case CursorState.Left:
+                            selectedLayer = x;
+                            _isResizing = true;
+                            isSelectNone = false;
+                            _direction = CursorState.Left;
+                            break;
+                        case CursorState.Right:
+                            selectedLayer = x;
+                            _isResizing = true;
+                            isSelectNone = false;
+                            _direction = CursorState.Right;
+                            break;
+                        case CursorState.Top:
+                            selectedLayer = x;
+                            _isResizing = true;
+                            isSelectNone = false;
+                            _direction = CursorState.Top;
+                            break;
+                        case CursorState.Bottom:
+                            selectedLayer = x;
+                            _isResizing = true;
+                            isSelectNone = false;
+                            _direction = CursorState.Bottom;
+                            break;
                     }
+                }
+                if(isSelectNone)
+                {
+                    selectedLayer = new KeyValuePair<string, ILayer>();
                 }
                 ReDraw();
             }

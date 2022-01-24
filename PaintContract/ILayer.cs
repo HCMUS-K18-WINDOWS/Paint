@@ -1,3 +1,4 @@
+using Paint;
 using System;
 using System.Runtime.Serialization;
 using System.Windows;
@@ -10,11 +11,13 @@ namespace PaintContract
         Point2D Offset { get; set; }
         public bool IsShow { get; set; }
         public string GetUniqueName();
-        int checkPosition(Point2D position);  //  0 out,  1 in, 2 above x, 3 above y, 4 corner
+        CursorState checkPosition(Point2D position);  //  0 out,  1 in, 2 above top, 3 above left, 4 above right, 5 above bot
 
         void handleMove(Point2D p);
 
         void handleMoveDone();
+
+        void handleResize(CursorState direction, double delta);
         UIElement Draw();
     }
 }
