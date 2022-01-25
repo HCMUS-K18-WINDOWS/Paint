@@ -150,7 +150,17 @@ namespace PaintLibrary
 
         public void handleResize(CursorState direction, double deltaX, double deltaY)
         {
-            throw new NotImplementedException();
+            switch (direction)
+            {
+                case CursorState.Start:
+                    _start.X += deltaX;
+                    _start.Y += deltaY;
+                    break;
+                case CursorState.End:
+                    _end.X += deltaX;
+                    _end.Y += deltaY;
+                    break;
+            }
         }
     }
 }

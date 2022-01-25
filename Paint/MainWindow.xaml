@@ -51,7 +51,7 @@
         </Menu>
 
         <ToolBarTray DockPanel.Dock="Top">
-            <ToolBar
+            <ToolBar Name="ToolBarTop"
     Style="{DynamicResource MaterialDesignToolBar}"
     ClipToBounds="False">
                 <Label
@@ -105,7 +105,9 @@
         Content="{materialDesign:PackIcon Kind=DotsHorizontal}" />
                 </ComboBox>
                 <Separator/>
-                <Button x:Name="addImage" Click="addImage_Click">Add Image</Button>
+                <StackPanel x:Name="ToolList" Orientation="Horizontal">
+                    <Button x:Name="addImage" Click="addImage_Click">Image</Button>
+                </StackPanel>
             </ToolBar>
         </ToolBarTray>
         <Grid DockPanel.Dock="Bottom">

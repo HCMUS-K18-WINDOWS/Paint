@@ -28,9 +28,10 @@ namespace Paint
     {
         //public Dictionary<string, ILayer> Layers { get; set; }
         public ObservableCollection<KeyValuePair<string, ILayer>> Layers { get; set; }
+        public Dictionary<string, ILayer> LayerPrototypes { get; set; }
         public KeyValuePair<string, ILayer>  selectedLayer { get; set; }
         public Dictionary<string, ILayer> PenLines { get; set; }
-        IShape _preview;
+        ILayer _preview;
         private bool _isDrawing = false;
         private bool _penMode = false;
         private bool _isSelecting = false;
@@ -42,6 +43,7 @@ namespace Paint
         {
             InitializeComponent();
             Layers = new ObservableCollection<KeyValuePair<string, ILayer>>();
+            LayerPrototypes = new Dictionary<string, ILayer>();
             PenLines = new Dictionary<string, ILayer>();
             ListBoxLayer.ItemsSource = Layers;
         }
@@ -49,6 +51,28 @@ namespace Paint
         private void Window_Loaded(object sender, RoutedEventArgs e)
         {
             LoadExternalDllAndCreateCbbItems();
+            CreateLayerButtons();
+        }
+
+        private void CreateLayerButtons()
+        {
+            foreach(var layer in LayerPrototypes)
+            {
+                var button = new System.Windows.Controls.Button()
+                {
+                    Content = layer.Key
+                };
+
+                button.Click += OnClick;
+                ToolList.Children.Add(button);
+                
+            }
+        }
+
+        private void OnClick(object sender, RoutedEventArgs e)
+        {
+            var element = sender as System.Windows.Controls.Button;
+            _preview = (ILayer)LayerPrototypes[element.Content.ToString()].Clone();
         }
 
         public void LoadExternalDllAndCreateCbbItems ()
@@ -63,10 +87,15 @@ namespace Paint
                 {
                     if(type.IsClass)
                     {
+                        
                         if(typeof(IShape).IsAssignableFrom(type))
                         {
                             IShape shape = (IShape)Activator.CreateInstance(type);
                             ShapeBuilder.GetInstance()._prototypes.Add(shape.Name, shape);
+                        } else if (typeof(ILayer).IsAssignableFrom(type))
+                        {
+                            ILayer layer = (ILayer)Activator.CreateInstance(type);
+                            LayerPrototypes.Add(layer.Name, layer);
                         }
                     }
                 }
@@ -194,7 +223,13 @@ namespace Paint
             if (!_penMode) Layers.Insert(0, new KeyValuePair<string, ILayer>(_preview.GetUniqueName(), _preview));
             else PenLines.Add(_preview.GetUniqueName(), _preview);
             // Sinh ra đối tượng mẫu kế
-            _preview = ShapeBuilder.GetInstance().BuildShape(Cbb_Shape.SelectedItem.ToString());
+            if(_preview as IShape != null)
+            {
+                _preview = ShapeBuilder.GetInstance().BuildShape(Cbb_Shape.SelectedItem.ToString());
+            } else
+            {
+                _preview = (ILayer)LayerPrototypes[_preview.Name].Clone();
+            }
 
             ReDraw();
         }
@@ -296,6 +331,10 @@ namespace Paint
                     case CursorState.Out:
                         Mouse.OverrideCursor = System.Windows.Input.Cursors.Arrow;
                         break;
+                    case CursorState.Start:
+                    case CursorState.End:
+                        Mouse.OverrideCursor = System.Windows.Input.Cursors.SizeWE;
+                        break;
                     default:
                         Mouse.OverrideCursor = System.Windows.Input.Cursors.Arrow;
                         break;
@@ -308,11 +347,6 @@ namespace Paint
                     ReDraw();
                 }
             }
-        }
-
-        private void Cbb_Shape_SelectionChanged(object sender, SelectionChangedEventArgs e)
-        {
-
         }
 
         private void Shape_Selected(object sender, SelectionChangedEventArgs e)
@@ -495,5 +529,6 @@ namespace Paint
                 ReDraw();
             }
         }
+
     }
 }
