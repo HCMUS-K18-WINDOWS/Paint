@@ -18,6 +18,7 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
+using Cursors = System.Windows.Input.Cursors;
 
 namespace Paint
 {
@@ -121,9 +122,14 @@ namespace Paint
             {
                 var color = System.Windows.Media.Color.FromArgb(dlg.Color.A, dlg.Color.R, dlg.Color.G, dlg.Color.B);
                 color_fill_react.Background = new SolidColorBrush(color);
-
-                ShapeBuilder.GetInstance().BuildColorFill(color);
-                _preview = ShapeBuilder.GetInstance().BuildShape(Cbb_Shape.SelectedItem.ToString());
+                if(selectedLayer.Value != null)
+                {
+                    ((IShape)selectedLayer.Value).InsideColor = color;
+                    ReDraw();
+                }
+                
+                //ShapeBuilder.GetInstance().BuildColorFill(color);
+                //_preview = ShapeBuilder.GetInstance().BuildShape(Cbb_Shape.SelectedItem.ToString());
             }
         }
 
@@ -353,6 +359,12 @@ namespace Paint
                     break;
                 case "DASHDOT":
                     type = StrokeType.DASHDOT;
+                    break;
+                case "DOTDOT":
+                    type = StrokeType.DOTDOT;
+                    break;
+                case "DASH":
+                    type = StrokeType.DASH;
                     break;
                 default:
                     break;

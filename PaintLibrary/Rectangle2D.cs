@@ -70,6 +70,10 @@ namespace PaintLibrary
                     rect.Stroke = new SolidColorBrush(OutlineColor);
                     rect.StrokeDashArray = new DoubleCollection(new double[] { 5, 5, 1, 5 });
                     break;
+                case StrokeType.DOTDOT:
+                    rect.Stroke = new SolidColorBrush(OutlineColor);
+                    rect.StrokeDashArray = new DoubleCollection(new double[] { 1, 1 });
+                    break;
                 default:
                     break;
             }

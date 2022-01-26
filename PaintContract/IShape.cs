@@ -11,6 +11,7 @@ namespace PaintContract
         SOLID,
         DASH,
         DASHDOT,
+        DOTDOT
     }
 
     public interface IShape : IEditableLayer

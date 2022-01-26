@@ -99,10 +99,14 @@
       Content="Stroke:"
       VerticalAlignment="Center" />
                 <ComboBox x:Name="CbbStroke" VerticalAlignment="Center" SelectionChanged="ComboBox_SelectionChanged" >
-                    <ComboBoxItem IsSelected="True" x:Name="SOLID"
+                    <ComboBoxItem IsSelected="True" Name="SOLID"
+        Content="None" />
+                    <ComboBoxItem Name="DASH"
         Content="{materialDesign:PackIcon Kind=Minus}" />
-                    <ComboBoxItem Name="DASHDOT"
+                    <ComboBoxItem Name="DOTDOT"
         Content="{materialDesign:PackIcon Kind=DotsHorizontal}" />
+                    <ComboBoxItem Name="DASHDOT"
+        Content="{materialDesign:PackIcon Kind=RayEnd}" />
                 </ComboBox>
                 <Separator/>
                 <StackPanel x:Name="ToolList" Orientation="Horizontal">
