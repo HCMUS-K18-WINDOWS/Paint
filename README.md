@@ -1,4 +1,4 @@
-Paint
+# Paint
 ![alt text](https://i.imgur.com/xZfDTpq.png)
 ## Thông tin nhóm
 
