@@ -9,7 +9,7 @@ using System.Windows.Shapes;
 
 namespace PaintContract
 {
-    public class Point2D
+    public class Point2D: ICloneable
     {
         public double X { get; set; }
         public double Y { get; set; }
@@ -23,6 +23,11 @@ namespace PaintContract
         {
             X = _x;
             Y = _y;
+        }
+
+        public object Clone()
+        {
+            return this.MemberwiseClone();
         }
     }
 }

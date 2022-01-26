@@ -31,6 +31,8 @@ namespace PaintLibrary
         public Ellipse2D()
         {
             Offset = new Point2D() { X = 0, Y = 0 };
+            _botRight = new Point2D(0,0);
+            _topLeft = new Point2D(0,0);
             Stroke = StrokeType.SOLID;
             Thickness = 1;
             OutlineColor = Colors.Black;
@@ -39,7 +41,11 @@ namespace PaintLibrary
         }
         public object Clone()
         {
-            return this.MemberwiseClone();
+            var newEllipse = (Ellipse2D)this.MemberwiseClone();
+            newEllipse._botRight = (Point2D)_botRight.Clone();
+            newEllipse._topLeft = (Point2D)_topLeft.Clone();
+            return newEllipse;
+
         }
 
         public UIElement Draw()

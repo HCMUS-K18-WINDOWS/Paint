@@ -108,7 +108,10 @@
                 <StackPanel x:Name="ToolList" Orientation="Horizontal">
                     <Button x:Name="addImage" Click="addImage_Click">Image</Button>
                     <Button x:Name="addText" Click="addText_Click">Text</Button>
-
+                    <Button x:Name="copy" Click="copy_Click">Copy</Button>
+                    <Button x:Name="cut" Click="cut_Click">Cut</Button>
+                    <Button x:Name="paste" Click="paste_Click">Paste</Button>
+                    
                 </StackPanel>
             </ToolBar>
         </ToolBarTray>

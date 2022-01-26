@@ -29,6 +29,7 @@ namespace Paint
         //public Dictionary<string, ILayer> Layers { get; set; }
         public ObservableCollection<KeyValuePair<string, ILayer>> Layers { get; set; }
         public KeyValuePair<string, ILayer>  selectedLayer { get; set; }
+        public KeyValuePair<string, ILayer> editLayer { get; set; }
         public Dictionary<string, ILayer> PenLines { get; set; }
         ILayer _preview;
         private bool _isDrawing = false;
@@ -505,6 +506,39 @@ namespace Paint
         private void addText_Click(object sender, RoutedEventArgs e)
         {
             _preview = new Text2D();
+        }
+
+        private void cut_Click(object sender, RoutedEventArgs e)
+        {
+           
+            if (selectedLayer.Value != null)
+            {
+                editLayer = selectedLayer;
+            }
+            Layers.Remove(selectedLayer);
+            selectedLayer = new KeyValuePair<string, ILayer>();
+            ReDraw();
+
+        }
+
+        private void paste_Click(object sender, RoutedEventArgs e)
+        {
+            Layers.Insert(0, editLayer);
+            //selectedLayer = editLayer;
+            //editLayer = new KeyValuePair<string, ILayer>();
+            ReDraw();
+        }
+
+        private void copy_Click(object sender, RoutedEventArgs e)
+        {
+            if(selectedLayer.Value != null)
+            {
+                var newObject = (ILayer)selectedLayer.Value.Clone();
+                editLayer = new KeyValuePair<string, ILayer>(
+                    newObject.GetUniqueName(),
+                    newObject
+                    );
+            }
         }
     }
 }
