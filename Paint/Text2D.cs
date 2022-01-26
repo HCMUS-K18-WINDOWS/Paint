@@ -28,12 +28,12 @@ namespace Paint
         public Text2D()
         {
             Offset = new Point2D(0, 0);
-            Text = "Demo";
         }
 
         public Text2D(string text)
         {
             Text = text;
+            Offset = new Point2D(0, 0);
         }
 
         public CursorState checkPosition(Point2D position)
@@ -96,23 +96,27 @@ namespace Paint
                 X = _x,
                 Y = _y
             };
+            
         }
 
         public void HandleEnd(double _x, double _y)
         {
-            _end = new Point2D()
+            if (Text == null)
             {
-                X = _x,
-                Y = _y
-            };
-            AddTextWindow dialog = new AddTextWindow();
-            dialog.ShowDialog();
-            if (dialog.DialogResult == true)
-            {
-                Text = AddTextWindow.Text;
+                _end = new Point2D()
+                {
+                    X = _x,
+                    Y = _y
+                 };
+            
+                AddTextWindow dialog = new AddTextWindow();
+                dialog.ShowDialog();
+                if (dialog.DialogResult == true)
+                {
+                    Text = AddTextWindow.Text;
 
+                }
             }
-
         }
 
         public void handleMove(Point2D p)
