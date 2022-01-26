@@ -107,6 +107,8 @@
                 <Separator/>
                 <StackPanel x:Name="ToolList" Orientation="Horizontal">
                     <Button x:Name="addImage" Click="addImage_Click">Image</Button>
+                    <Button x:Name="addText" Click="addText_Click">Text</Button>
+
                 </StackPanel>
             </ToolBar>
         </ToolBarTray>

@@ -31,6 +31,11 @@ namespace Paint
             Text = "Demo";
         }
 
+        public Text2D(string text)
+        {
+            Text = text;
+        }
+
         public CursorState checkPosition(Point2D position)
         {
             throw new NotImplementedException();
@@ -46,7 +51,7 @@ namespace Paint
             var width = Math.Abs(_end.X - _start.X);
             var height = Math.Abs(_end.Y - _start.Y);
 
-            var text = new TextBox()
+            var text = new TextBlock()
             {
                 Text = Text,
                 Width = 300,
@@ -85,6 +90,7 @@ namespace Paint
 
         public void HandleStart(double _x, double _y)
         {
+            
             _start = new Point2D()
             {
                 X = _x,
@@ -99,7 +105,14 @@ namespace Paint
                 X = _x,
                 Y = _y
             };
-            
+            AddTextWindow dialog = new AddTextWindow();
+            dialog.ShowDialog();
+            if (dialog.DialogResult == true)
+            {
+                Text = AddTextWindow.Text;
+
+            }
+
         }
 
         public void handleMove(Point2D p)

@@ -28,7 +28,6 @@ namespace Paint
     {
         //public Dictionary<string, ILayer> Layers { get; set; }
         public ObservableCollection<KeyValuePair<string, ILayer>> Layers { get; set; }
-        public Dictionary<string, ILayer> LayerPrototypes { get; set; }
         public KeyValuePair<string, ILayer>  selectedLayer { get; set; }
         public Dictionary<string, ILayer> PenLines { get; set; }
         ILayer _preview;
@@ -43,7 +42,6 @@ namespace Paint
         {
             InitializeComponent();
             Layers = new ObservableCollection<KeyValuePair<string, ILayer>>();
-            LayerPrototypes = new Dictionary<string, ILayer>();
             PenLines = new Dictionary<string, ILayer>();
             ListBoxLayer.ItemsSource = Layers;
         }
@@ -51,28 +49,6 @@ namespace Paint
         private void Window_Loaded(object sender, RoutedEventArgs e)
         {
             LoadExternalDllAndCreateCbbItems();
-            CreateLayerButtons();
-        }
-
-        private void CreateLayerButtons()
-        {
-            foreach(var layer in LayerPrototypes)
-            {
-                var button = new System.Windows.Controls.Button()
-                {
-                    Content = layer.Key
-                };
-
-                button.Click += OnClick;
-                ToolList.Children.Add(button);
-                
-            }
-        }
-
-        private void OnClick(object sender, RoutedEventArgs e)
-        {
-            var element = sender as System.Windows.Controls.Button;
-            _preview = (ILayer)LayerPrototypes[element.Content.ToString()].Clone();
         }
 
         public void LoadExternalDllAndCreateCbbItems ()
@@ -81,7 +57,7 @@ namespace Paint
             var dlls = new DirectoryInfo(exeFolder).GetFiles("*.dll");
             foreach(var dll in dlls)
             {
-                var assembly = Assembly.LoadFile(dll.FullName);
+                var assembly = Assembly.LoadFrom(dll.FullName);
                 var types = assembly.GetTypes();
                 foreach(var type in types)
                 {
@@ -92,11 +68,7 @@ namespace Paint
                         {
                             IShape shape = (IShape)Activator.CreateInstance(type);
                             ShapeBuilder.GetInstance()._prototypes.Add(shape.Name, shape);
-                        } else if (typeof(ILayer).IsAssignableFrom(type))
-                        {
-                            ILayer layer = (ILayer)Activator.CreateInstance(type);
-                            LayerPrototypes.Add(layer.Name, layer);
-                        }
+                        } 
                     }
                 }
             }
@@ -226,9 +198,9 @@ namespace Paint
             if(_preview as IShape != null)
             {
                 _preview = ShapeBuilder.GetInstance().BuildShape(Cbb_Shape.SelectedItem.ToString());
-            } else
+            } else if(_preview as ILayer != null)
             {
-                _preview = (ILayer)LayerPrototypes[_preview.Name].Clone();
+                _preview = new Text2D();
             }
 
             ReDraw();
@@ -530,5 +502,9 @@ namespace Paint
             }
         }
 
+        private void addText_Click(object sender, RoutedEventArgs e)
+        {
+            _preview = new Text2D();
+        }
     }
 }
