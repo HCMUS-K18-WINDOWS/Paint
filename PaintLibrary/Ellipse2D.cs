@@ -130,38 +130,39 @@ namespace PaintLibrary
             var height = Math.Abs(_botRight.Y - _topLeft.Y);
             var right = left + width;
             var bottom = top + height;
+            if (position.Y <= top + 3 && position.Y >= top - 3 && position.X >= left - 3 && position.X <= left + 3)
+            {
+                return CursorState.CornerTopLeft;
+            }
+            if (position.Y <= top + 3 && position.Y >= top - 3 && position.X >= right - 3 && position.X <= right + 3)
+            {
+                return CursorState.CornerTopRight;
+            }
+            if (position.Y <= bottom + 3 && position.Y >= bottom - 3 && position.X >= left - 3 && position.X <= left + 3)
+            {
+                return CursorState.CornerBottomLeft;
+            }
+            if (position.Y <= bottom + 3 && position.Y >= bottom - 3 && position.X >= right - 3 && position.X <= right + 3)
+            {
+                return CursorState.CornerBottomRight;
+            }
             if (position.X < right && position.X > left && position.Y > top && position.Y < bottom)
                 return CursorState.In;
             if (position.Y < bottom && position.Y > top)
             {
-                if (position.X == left)
+                if (position.X <= left && position.X >= left - 3)
                     return CursorState.Left;
-                if (position.X == right)
+                if (position.X >= right && position.X <= right + 3)
                     return CursorState.Right;
             }
             if (position.X < right && position.X > left)
             {
-                if (position.Y == top)
+                if (position.Y <= top && position.Y >= top - 3)
                     return CursorState.Top;
-                if (position.Y == bottom)
+                if (position.Y >= bottom && position.Y <= bottom + 3)
                     return CursorState.Bottom;
             }
-            if (position.Y == top && position.X == left)
-            {
-                return CursorState.CornerTopLeft;
-            }
-            if (position.Y == top && position.X == right)
-            {
-                return CursorState.CornerTopRight;
-            }
-            if (position.Y == bottom && position.X == left)
-            {
-                return CursorState.CornerBottomLeft;
-            }
-            if (position.Y == bottom && position.X == right)
-            {
-                return CursorState.CornerBottomRight;
-            }
+
             return CursorState.Out;
         }
 
