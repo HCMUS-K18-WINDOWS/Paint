@@ -38,7 +38,10 @@ namespace PaintLibrary
 
         public object Clone()
         {
-            return this.MemberwiseClone();
+            var newLine = (Line2D)this.MemberwiseClone();
+            newLine._start = (Point2D)_start.Clone();
+            newLine._end = (Point2D)_end.Clone();
+            return newLine;
         }
 
         public UIElement Draw()

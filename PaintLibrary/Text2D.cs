@@ -22,8 +22,8 @@ namespace Paint
 
         public string Text { get; set; }
 
-        private Point2D _start;
-        private Point2D _end;
+        private Point2D _start = new Point2D();
+        private Point2D _end = new Point2D();
 
         public Text2D()
         {
@@ -38,7 +38,10 @@ namespace Paint
 
         public object Clone()
         {
-            return this.MemberwiseClone();
+            var newText = (Text2D)this.MemberwiseClone();
+            newText._end = (Point2D)_end.Clone();
+            newText._start = (Point2D)_start.Clone();
+            return newText;
         }
 
         public UIElement Draw()

@@ -30,6 +30,7 @@ namespace Paint
         public ObservableCollection<KeyValuePair<string, ILayer>> Layers { get; set; }
         public KeyValuePair<string, ILayer>  selectedLayer { get; set; }
         public KeyValuePair<string, ILayer> editLayer { get; set; }
+        public string status { get; set; }
         public Dictionary<string, ILayer> PenLines { get; set; }
         ILayer _preview;
         private bool _isDrawing = false;
@@ -510,7 +511,7 @@ namespace Paint
 
         private void cut_Click(object sender, RoutedEventArgs e)
         {
-           
+            status = "cut";
             if (selectedLayer.Value != null)
             {
                 editLayer = selectedLayer;
@@ -518,26 +519,44 @@ namespace Paint
             Layers.Remove(selectedLayer);
             selectedLayer = new KeyValuePair<string, ILayer>();
             ReDraw();
-
+            
         }
 
         private void paste_Click(object sender, RoutedEventArgs e)
         {
-            Layers.Insert(0, editLayer);
-            //selectedLayer = editLayer;
-            //editLayer = new KeyValuePair<string, ILayer>();
-            ReDraw();
-        }
-
-        private void copy_Click(object sender, RoutedEventArgs e)
-        {
-            if(selectedLayer.Value != null)
+            
+            if (status == "cut")
+            {
+                status = "";
+                Layers.Insert(0, editLayer);
+                selectedLayer = editLayer;
+                ReDraw();
+            }
+            else if(status == "copy")
             {
                 var newObject = (ILayer)selectedLayer.Value.Clone();
                 editLayer = new KeyValuePair<string, ILayer>(
                     newObject.GetUniqueName(),
                     newObject
                     );
+                Layers.Insert(0, editLayer);
+                selectedLayer = editLayer;
+                ReDraw();
+            }
+            
+        }
+
+        private void copy_Click(object sender, RoutedEventArgs e)
+        {
+            status = "copy";
+            if (selectedLayer.Value != null)
+            {
+                editLayer = selectedLayer;
+                //var newObject = (ILayer)selectedLayer.Value.Clone();
+                //editLayer = new KeyValuePair<string, ILayer>(
+                //    newObject.GetUniqueName(),
+                //    newObject
+                //    );
             }
         }
     }

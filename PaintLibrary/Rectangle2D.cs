@@ -15,8 +15,8 @@ namespace PaintLibrary
     public class Rectangle2D : IShape
     {
         public static int _numberOfInstances = 0;
-        public Point2D _topLeft;
-        public Point2D _botRight;
+        public Point2D _topLeft = new Point2D();
+        public Point2D _botRight = new Point2D();
         public string Name => "Rectangle";
 
         public Point2D Offset { get; set ; }
@@ -38,7 +38,10 @@ namespace PaintLibrary
 
         public object Clone()
         {
-            return this.MemberwiseClone();
+            var NewRec = (Rectangle2D)this.MemberwiseClone();
+            NewRec._botRight = (Point2D)_botRight.Clone();
+            NewRec._topLeft = (Point2D)_topLeft.Clone();
+            return NewRec;
         }
 
         public UIElement Draw()
