@@ -17,8 +17,8 @@ namespace Paint
         public static int numberOfInstances = 0;
         public string Name => "Text";
 
-        public Point2D Offset { get ; set; }
-        public bool IsShow { get; set ; }
+        public Point2D Offset { get; set; }
+        public bool IsShow { get; set; }
 
         public string Text { get; set; }
 
@@ -90,13 +90,13 @@ namespace Paint
 
         public void HandleStart(double _x, double _y)
         {
-            
+
             _start = new Point2D()
             {
                 X = _x,
                 Y = _y
             };
-            
+
         }
 
         public void HandleEnd(double _x, double _y)
@@ -107,8 +107,8 @@ namespace Paint
                 {
                     X = _x,
                     Y = _y
-                 };
-            
+                };
+
                 AddTextWindow dialog = new AddTextWindow();
                 dialog.ShowDialog();
                 if (dialog.DialogResult == true)

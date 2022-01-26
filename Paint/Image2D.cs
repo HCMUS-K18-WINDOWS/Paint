@@ -47,16 +47,16 @@ namespace Paint
         public UIElement Draw()
         {
             BitmapImage bitmap = new BitmapImage(new Uri(FilePath));
-            var width = (_botRight != null) ? Math.Abs(_botRight.X - _topLeft.X) : bitmap.PixelWidth ;
-            var height = (_botRight != null) ? Math.Abs(_botRight.Y - _topLeft.Y) : bitmap.PixelHeight ;
+            var width = (_botRight != null) ? Math.Abs(_botRight.X - _topLeft.X) : bitmap.PixelWidth;
+            var height = (_botRight != null) ? Math.Abs(_botRight.Y - _topLeft.Y) : bitmap.PixelHeight;
             Image img = new Image();
             img.Source = bitmap;
             img.Width = width;
             img.Height = height;
             img.Stretch = Stretch.Fill;
-            if(_botRight == null)
+            if (_botRight == null)
             {
-                _botRight = new Point2D(_topLeft.X + width, _topLeft.Y + bitmap.PixelHeight );
+                _botRight = new Point2D(_topLeft.X + width, _topLeft.Y + bitmap.PixelHeight);
             }
             RenderOptions.SetBitmapScalingMode(img, BitmapScalingMode.HighQuality);
 
