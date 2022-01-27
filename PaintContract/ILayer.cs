@@ -13,6 +13,7 @@ namespace PaintContract
         public string GetUniqueName();
         CursorState checkPosition(Point2D position);  //  0 out,  1 in, 2 above top, 3 above left, 4 above right, 5 above bot
 
+        void handlePaste(Point2D p);
         void handleMove(Point2D p);
 
         void handleMoveDone();

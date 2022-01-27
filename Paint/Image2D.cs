@@ -284,5 +284,10 @@ namespace Paint
 
             return rectangle;
         }
+
+        public void handlePaste(Point2D p)
+        {
+            throw new NotImplementedException();
+        }
     }
 }

@@ -57,15 +57,8 @@
                 <Label
       Content="Shape:"
       VerticalAlignment="Center" />
-                <ComboBox Margin="0,0,20,0" x:Name="Cbb_Shape" VerticalAlignment="Center" SelectionChanged="Shape_Selected">
-                    <!--<ComboBoxItem IsSelected="True"
-        Content="{materialDesign:PackIcon Kind=Minus}"/>
-                    <ComboBoxItem
-        Content="{materialDesign:PackIcon Kind=RectangleOutline}"/>
-                    <ComboBoxItem
-        Content="{materialDesign:PackIcon Kind=CircleOutline}"/>
-                    <ComboBoxItem
-        Content="{materialDesign:PackIcon Kind=TriangleOutline}" />-->
+                <ComboBox SelectionChanged="Shape_Selected" Margin="0,0,20,0" x:Name="Cbb_Shape" VerticalAlignment="Center" >
+                   
                 </ComboBox>
                 <Button x:Name="selectButton" Click="selectButton_Click" Foreground="Gray" Margin="0,0,10,0" Width="20" Height="20" Style="{StaticResource MaterialDesignFloatingActionMiniAccentButton}"  Background="{x:Null}" BorderBrush="{x:Null}">
                     <materialDesign:PackIcon Kind="CursorDefault" Width="20" Height="20" VerticalAlignment="Center" HorizontalAlignment="Center"/>
@@ -112,10 +105,6 @@
                 <StackPanel x:Name="ToolList" Orientation="Horizontal">
                     <Button x:Name="addImage" Click="addImage_Click">Image</Button>
                     <Button x:Name="addText" Click="addText_Click">Text</Button>
-                    <Button x:Name="copy" Click="copy_Click">Copy</Button>
-                    <Button x:Name="cut" Click="cut_Click">Cut</Button>
-                    <Button x:Name="paste" Click="paste_Click">Paste</Button>
-                    
                 </StackPanel>
             </ToolBar>
         </ToolBarTray>
@@ -127,15 +116,23 @@
             
              <Grid x:Name="grid" Grid.Column="0"  ClipToBounds="True" >
 
-                <Canvas x:Name="canvas" Background="Transparent" MouseDown="Canvas_MouseDown" MouseUp="Canvas_MouseUp"
-                           MouseWheel="canvas_MouseWheel" MouseMove="Canvas_MouseMove" Grid.ColumnSpan="2">
+                <Canvas x:Name="canvas" Background="Transparent"  Grid.ColumnSpan="2">
                     <Canvas.RenderTransform>
                         <MatrixTransform/>
                     </Canvas.RenderTransform>
                 </Canvas>
-                <Border Background="Transparent" MouseDown="Canvas_MouseDown" MouseUp="Canvas_MouseUp"
+                <Border Background="Transparent" MouseLeftButtonUp="Border_MouseLeftButtonUp" MouseRightButtonDown="Border_MouseRightButtonDown"
                        MouseLeftButtonDown="Border_MouseLeftButtonDown"  MouseWheel="canvas_MouseWheel" MouseMove="Canvas_MouseMove" Grid.ColumnSpan="2"
                         >
+                    <Border.ContextMenu>
+                        <ContextMenu>
+                            <MenuItem Header="Copy" Click="copy_Click"/>
+                            <MenuItem Header="Cut" Click="cut_Click"/>
+                            <Separator />
+                            <MenuItem Header="Paste" Click="paste_Click"/>
+                            <MenuItem Header="Delete" Click="delete_Click"/>
+                        </ContextMenu>
+                    </Border.ContextMenu>
                 </Border>
             </Grid>
             
@@ -211,14 +208,7 @@
           Margin="16"
           Text="Layer" />
                         </materialDesign:ColorZone>
-                        <Button
-        Style="{StaticResource MaterialDesignFloatingActionMiniAccentButton}"
-        Command="{x:Static materialDesign:DialogHost.OpenDialogCommand}"
-        VerticalAlignment="Bottom"
-        HorizontalAlignment="Right"
-        Grid.Row="0"
-        Margin="0 0 28 -20"
-        Content="{materialDesign:PackIcon Kind=Plus, Size=22}" />
+                        
                     </Grid>
                 </Border>
             </materialDesign:DialogHost>

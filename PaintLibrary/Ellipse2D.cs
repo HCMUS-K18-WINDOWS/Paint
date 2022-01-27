@@ -31,8 +31,8 @@ namespace PaintLibrary
         public Ellipse2D()
         {
             Offset = new Point2D() { X = 0, Y = 0 };
-            _botRight = new Point2D(0,0);
-            _topLeft = new Point2D(0,0);
+            _botRight = new Point2D();
+            _topLeft = new Point2D();
             Stroke = StrokeType.SOLID;
             Thickness = 1;
             OutlineColor = Colors.Black;
@@ -123,6 +123,15 @@ namespace PaintLibrary
                 X = _x,
                 Y = _y
             };
+        }
+
+        public void handlePaste(Point2D p)
+        {
+            var width = Math.Abs(_botRight.X - _topLeft.X);
+            var height = Math.Abs(_botRight.Y - _topLeft.Y);
+            HandleStart(p.X, p.Y);
+            HandleEnd(p.X + width, p.Y + height);
+
         }
 
         public CursorState checkPosition(Point2D position)
@@ -329,5 +338,7 @@ namespace PaintLibrary
                     break;
             }
         }
+
+
     }
 }
