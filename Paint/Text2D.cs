@@ -133,5 +133,10 @@ namespace Paint
         {
             throw new NotImplementedException();
         }
+
+        public void handlePaste(Point2D p)
+        {
+            throw new NotImplementedException();
+        }
     }
 }

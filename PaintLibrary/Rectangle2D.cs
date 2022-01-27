@@ -28,7 +28,7 @@ namespace PaintLibrary
 
         public Rectangle2D()
         {
-            Offset = new Point2D() { X = 0, Y = 0 };
+            Offset = new Point2D();
             Stroke = StrokeType.SOLID;
             Thickness = 1;
             OutlineColor = Colors.Black;
@@ -320,6 +320,14 @@ namespace PaintLibrary
                 default:
                     break;
             }
+        }
+
+        public void handlePaste(Point2D p)
+        {
+            var width = Math.Abs(_botRight.X - _topLeft.X);
+            var height = Math.Abs(_botRight.Y - _topLeft.Y);
+            HandleStart(p.X, p.Y);
+            HandleEnd(p.X + width, p.Y + height);
         }
     }
 }

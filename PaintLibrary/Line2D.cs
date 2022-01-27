@@ -29,7 +29,7 @@ namespace PaintLibrary
 
         public Line2D()
         {
-            Offset = new Point2D() { X = 0, Y = 0 };
+            Offset = new Point2D();
             Stroke = StrokeType.SOLID;
             Thickness = 1;
             OutlineColor = Colors.Black;
@@ -168,6 +168,35 @@ namespace PaintLibrary
                     _end.Y += deltaY;
                     break;
             }
+        }
+
+        public void handlePaste(Point2D p)
+        {
+            var X = _end.X - _start.X;
+            var Y = _end.Y - _start.Y;
+            HandleStart(p.X, p.Y);
+            HandleEnd(p.X + X, p.Y + Y);
+            //if (_start.Y <= _end.Y && _start.X<= _end.X)
+            //{
+            //    HandleStart(p.X, p.Y);
+            //    HandleEnd(p.X + X, p.Y + Y);
+            //}
+            //else if (_start.Y >= _end.Y && _start.X <= _end.X)
+            //{
+            //    HandleStart(p.X, p.Y);
+            //    HandleEnd(p.X + X, p.Y - Y);
+            //}
+            //else if (_start.Y <= _end.Y && _start.X >= _end.X)
+            //{
+            //    HandleStart(p.X, p.Y);
+            //    HandleEnd(p.X - X, p.Y + Y);
+            //}
+            //else if (_start.Y >= _end.Y && _start.X >= _end.X)
+            //{
+            //    HandleStart(p.X, p.Y);
+            //    HandleEnd(p.X - X, p.Y - Y);
+            //}
+
         }
     }
 }

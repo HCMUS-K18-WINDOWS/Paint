@@ -34,7 +34,7 @@ namespace Paint
         public string status { get; set; }
         public Dictionary<string, ILayer> PenLines { get; set; }
         ILayer _preview;
-        private bool _isDrawing = false;
+        private bool _isDrawing = true;
         private bool _penMode = false;
         private bool _isSelecting = false;
         private Point _startPosition;
@@ -111,6 +111,11 @@ namespace Paint
 
                 ShapeBuilder.GetInstance().BuildColor(color);
                 _preview = ShapeBuilder.GetInstance().BuildShape(Cbb_Shape.SelectedItem.ToString());
+                if (selectedLayer.Value != null)
+                {
+                    ((IShape)selectedLayer.Value).OutlineColor = color;
+                    ReDraw();
+                }
             }
         }
 
@@ -128,8 +133,8 @@ namespace Paint
                     ReDraw();
                 }
                 
-                //ShapeBuilder.GetInstance().BuildColorFill(color);
-                //_preview = ShapeBuilder.GetInstance().BuildShape(Cbb_Shape.SelectedItem.ToString());
+                ShapeBuilder.GetInstance().BuildColorFill(color);
+                _preview = ShapeBuilder.GetInstance().BuildShape(Cbb_Shape.SelectedItem.ToString());
             }
         }
 
@@ -138,19 +143,75 @@ namespace Paint
 
         }
 
+        private void OnOffStatus(string x)
+        {
+            var colorBlack = new SolidColorBrush(System.Windows.Media.Color.FromRgb(0, 0, 0));
+            var colorGray = new SolidColorBrush(System.Windows.Media.Colors.Gray);
+            switch (x) {
+                case "shape":
+                    _isDrawing = false;
+                    _penMode = false;
+                    _isSelecting = false;
+                    //_isMoving = false;
+                    //_isResizing = false;
+                    selectButton.Foreground = colorGray;
+                    selectedLayer = new KeyValuePair<string, ILayer>();
+                    ReDraw();
+                    brushButton.Foreground = colorGray;
+                    break;
+                case "pen":
+                    _isDrawing = false;
+                    _penMode = true;
+                    _isSelecting = false;
+                    selectButton.Foreground = colorGray;
+                    selectedLayer = new KeyValuePair<string, ILayer>();
+                    ReDraw();
+                    brushButton.Foreground = colorBlack;
+                    break;
+                case "select":
+                    _isDrawing = false;
+                    _penMode = false;
+                    _isSelecting = true;
+                    selectButton.Foreground = colorBlack;
+                    brushButton.Foreground = colorGray;
+                    break;
+                default:
+                    break;
+            }
+        }
+        private void selectButton_Click(object sender, RoutedEventArgs e)
+        {
+            //_isSelecting = !_isSelecting;
+            OnOffStatus("select");
+            //if (_isSelecting)
+            //{
+            //    var colorBlack = new SolidColorBrush(System.Windows.Media.Color.FromRgb(0, 0, 0));
+            //    selectButton.Foreground = colorBlack;
+            //}
+            //else
+            //{
+            //    var colorGray = new SolidColorBrush(System.Windows.Media.Colors.Gray);
+            //    selectButton.Foreground = colorGray;
+            //    selectedLayer = new KeyValuePair<string, ILayer>();
+            //    ReDraw();
+            //}
+        }
+
         private void Brush_Button_Click(object sender, RoutedEventArgs e)
         {
-            _penMode = !_penMode;
-            if (_penMode)
-            {
-                var colorBlack = new SolidColorBrush(System.Windows.Media.Color.FromRgb(0, 0, 0));
-                brushButton.Foreground = colorBlack;
-            }
-            else
-            {
-                var colorGray = new SolidColorBrush(System.Windows.Media.Colors.Gray);
-                brushButton.Foreground = colorGray;
-            }
+
+            //_penMode = !_penMode;
+            OnOffStatus("pen");
+            //if (_penMode)
+            //{
+            //    var colorBlack = new SolidColorBrush(System.Windows.Media.Color.FromRgb(0, 0, 0));
+            //    brushButton.Foreground = colorBlack;
+            //}
+            //else
+            //{
+            //    var colorGray = new SolidColorBrush(System.Windows.Media.Colors.Gray);
+            //    brushButton.Foreground = colorGray;
+            //}
         }
 
         //private void Shape_Selected(object sender, RoutedEventArgs e)
@@ -159,20 +220,75 @@ namespace Paint
         //    if (brushButton != null)
         //        brushButton.Foreground = colorGray;
         //}
-
-        private void Canvas_MouseDown(object sender, MouseButtonEventArgs e)
+        private void Shape_Selected(object sender, SelectionChangedEventArgs e)
         {
-            if (_isSelecting) return;
-            _isDrawing = true;
-            Point pos = e.GetPosition(canvas);
-            if (_penMode)
-            {
-                _preview = ShapeBuilder.GetInstance().BuildShape("Line");
-            }
-            _preview.HandleStart(pos.X, pos.Y);
+            OnOffStatus("shape");
+            _preview = ShapeBuilder.GetInstance().BuildShape(Cbb_Shape.SelectedItem.ToString());
+
         }
 
-        private void Canvas_MouseUp(object sender, MouseButtonEventArgs e)
+        //private void Canvas_MouseDown(object sender, MouseButtonEventArgs e)
+        //{
+        //    if (_isSelecting) return;
+        //    _isDrawing = true;
+        //    Point pos = e.GetPosition(canvas);
+        //    if (_penMode)
+        //    {
+        //        _preview = ShapeBuilder.GetInstance().BuildShape("Line");
+        //    }
+        //    _preview.HandleStart(pos.X, pos.Y);
+        //}
+
+        private void Border_MouseLeftButtonDown(object sender, MouseButtonEventArgs e)
+        {
+            if (_isSelecting)
+            {
+                Point pos = e.GetPosition(canvas);
+                _startPosition = pos;
+
+                bool isSelectNone = true;
+                foreach (var x in Layers)
+                {
+                    var Currentdirection = x.Value.checkPosition(new Point2D(pos.X, pos.Y));
+                    if (Currentdirection != CursorState.Out)
+                    {
+                        switch (Currentdirection)
+                        {
+                            case CursorState.In:
+                                selectedLayer = x;
+                                _isMoving = true;
+                                isSelectNone = false;
+                                break;
+                            default:
+                                selectedLayer = x;
+                                _isResizing = true;
+                                isSelectNone = false;
+                                _direction = Currentdirection;
+                                break;
+                        }
+                        break;
+                    }
+
+                }
+                if (isSelectNone)
+                {
+                    selectedLayer = new KeyValuePair<string, ILayer>();
+                }
+                ReDraw();
+            }
+            else
+            {
+                _isDrawing = true;
+                Point pos2 = e.GetPosition(canvas);
+                if (_penMode)
+                {
+                    _preview = ShapeBuilder.GetInstance().BuildShape("Line");
+                }
+                _preview.HandleStart(pos2.X, pos2.Y);
+            }
+        }
+
+        private void Border_MouseLeftButtonUp(object sender, MouseButtonEventArgs e)
         {
             if(_isResizing)
             {
@@ -329,13 +445,7 @@ namespace Paint
             }
         }
 
-        private void Shape_Selected(object sender, SelectionChangedEventArgs e)
-        {
-            //_penMode = false;
-            //var colorGray = new SolidColorBrush(System.Windows.Media.Colors.Gray);
-            //brushButton.Foreground = colorGray;
-            _preview = ShapeBuilder.GetInstance().BuildShape(Cbb_Shape.SelectedItem.ToString());
-        }
+
 
         private void mySlider_ValueChanged(object sender, RoutedPropertyChangedEventArgs<double> e)
         {
@@ -460,61 +570,25 @@ namespace Paint
             }
         }
 
-        private void selectButton_Click(object sender, RoutedEventArgs e)
-        {
-            _isSelecting = !_isSelecting;
-            if (_isSelecting)
-            {
-                var colorBlack = new SolidColorBrush(System.Windows.Media.Color.FromRgb(0, 0, 0));
-                selectButton.Foreground = colorBlack;
-            }
-            else
-            {
-                var colorGray = new SolidColorBrush(System.Windows.Media.Colors.Gray);
-                selectButton.Foreground = colorGray;
-                selectedLayer = new KeyValuePair<string, ILayer>();
-                ReDraw();
-            }
-        }
+        //private void selectButton_Click(object sender, RoutedEventArgs e)
+        //{
+        //    //_isSelecting = !_isSelecting;
+        //    OnOffStatus("select");
+        //    if (_isSelecting)
+        //    {
+        //        var colorBlack = new SolidColorBrush(System.Windows.Media.Color.FromRgb(0, 0, 0));
+        //        selectButton.Foreground = colorBlack;
+        //    }
+        //    else
+        //    {
+        //        var colorGray = new SolidColorBrush(System.Windows.Media.Colors.Gray);
+        //        selectButton.Foreground = colorGray;
+        //        selectedLayer = new KeyValuePair<string, ILayer>();
+        //        ReDraw();
+        //    }
+        //}
 
-        private void Border_MouseLeftButtonDown(object sender, MouseButtonEventArgs e)
-        {
-            if(_isSelecting)
-            {
-                Point pos = e.GetPosition(canvas);
-                _startPosition = pos;
-                
-                bool isSelectNone = true;
-                foreach (var x in Layers)
-                {
-                    var Currentdirection = x.Value.checkPosition(new Point2D(pos.X, pos.Y));
-                    if(Currentdirection != CursorState.Out)
-                    {
-                        switch (Currentdirection)
-                        {
-                            case CursorState.In:
-                                selectedLayer = x;
-                                _isMoving = true;
-                                isSelectNone = false;
-                                break;
-                            default:
-                                selectedLayer = x;
-                                _isResizing = true;
-                                isSelectNone = false;
-                                _direction = Currentdirection;
-                                break;
-                        }
-                        break;
-                    }
-               
-                }
-                if(isSelectNone)
-                {
-                    selectedLayer = new KeyValuePair<string, ILayer>();
-                }
-                ReDraw();
-            }
-        }
+        
 
         private void addText_Click(object sender, RoutedEventArgs e)
         {
@@ -523,40 +597,41 @@ namespace Paint
 
         private void cut_Click(object sender, RoutedEventArgs e)
         {
+            
             status = "cut";
             if (selectedLayer.Value != null)
             {
                 editLayer = selectedLayer;
             }
-            Layers.Remove(selectedLayer);
-            selectedLayer = new KeyValuePair<string, ILayer>();
-            ReDraw();
             
         }
 
         private void paste_Click(object sender, RoutedEventArgs e)
         {
-            
+            Point2D pos = new Point2D(_startPosition.X, _startPosition.Y);
             if (status == "cut")
             {
                 status = "";
+                editLayer.Value.handlePaste(pos);
+                Layers.Insert(0, editLayer);
+                Layers.Remove(selectedLayer);
+                selectedLayer = editLayer;
+                ReDraw();
+            }
+            else if (status == "copy")
+            {
+                var newObject = (ILayer)editLayer.Value.Clone();
+                //newObject.handlePaste(pos);
+                editLayer = new KeyValuePair<string, ILayer>(
+                    newObject.GetUniqueName(),
+                    newObject
+                    );
+                editLayer.Value.handlePaste(pos);
                 Layers.Insert(0, editLayer);
                 selectedLayer = editLayer;
                 ReDraw();
             }
-            else if(status == "copy")
-            {
-                if (editLayer.Value == null) return;
-                var newObject = (ILayer)editLayer.Value.Clone();
-                var copyLayer = new KeyValuePair<string, ILayer>(
-                    newObject.GetUniqueName(),
-                    newObject
-                    );
-                Layers.Insert(0, copyLayer);
-                selectedLayer = copyLayer;
-                ReDraw();
-            }
-            
+
         }
 
         private void copy_Click(object sender, RoutedEventArgs e)
@@ -565,12 +640,21 @@ namespace Paint
             if (selectedLayer.Value != null)
             {
                 editLayer = selectedLayer;
-                //var newObject = (ILayer)selectedLayer.Value.Clone();
-                //editLayer = new KeyValuePair<string, ILayer>(
-                //    newObject.GetUniqueName(),
-                //    newObject
-                //    );
             }
         }
+
+        private void delete_Click(object sender, RoutedEventArgs e)
+        {
+            Layers.Remove(selectedLayer);
+            selectedLayer = new KeyValuePair<string, ILayer>();
+            ReDraw();
+        }
+        private void Border_MouseRightButtonDown(object sender, MouseButtonEventArgs e)
+        {
+            Point pos = e.GetPosition(canvas);
+            _startPosition = pos;
+        }
+
+        
     }
 }
