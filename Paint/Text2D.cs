@@ -22,8 +22,8 @@ namespace Paint
 
         public string Text { get; set; }
 
-        private Point2D _start;
-        private Point2D _end;
+        public Point2D _start;
+        public Point2D _end;
 
         public Text2D()
         {
@@ -38,7 +38,7 @@ namespace Paint
 
         public CursorState checkPosition(Point2D position)
         {
-            throw new NotImplementedException();
+            return CursorState.Out;
         }
 
         public object Clone()

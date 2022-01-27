@@ -546,13 +546,14 @@ namespace Paint
             }
             else if(status == "copy")
             {
-                var newObject = (ILayer)selectedLayer.Value.Clone();
-                editLayer = new KeyValuePair<string, ILayer>(
+                if (editLayer.Value == null) return;
+                var newObject = (ILayer)editLayer.Value.Clone();
+                var copyLayer = new KeyValuePair<string, ILayer>(
                     newObject.GetUniqueName(),
                     newObject
                     );
-                Layers.Insert(0, editLayer);
-                selectedLayer = editLayer;
+                Layers.Insert(0, copyLayer);
+                selectedLayer = copyLayer;
                 ReDraw();
             }
             
