@@ -42,6 +42,7 @@ namespace Paint
 
         public IShape BuildShape(string shapeType)
         {
+            if (shapeType == "None") return null;
             IShape shape = (IShape)_prototypes[shapeType].Clone();
             shape.OutlineColor = OutlineColor;
             shape.Stroke = Stroke;

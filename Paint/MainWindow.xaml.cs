@@ -34,6 +34,7 @@ namespace Paint
         
         public KeyValuePair<string, ILayer>  selectedLayer { get; set; }
         public KeyValuePair<string, ILayer> editLayer { get; set; }
+        public KeyValuePair<string, ILayer> preSelectedLayer { get; set; }
         public string status { get; set; }
         public Dictionary<string, ILayer> PenLines { get; set; }
         ILayer _preview;
@@ -43,6 +44,7 @@ namespace Paint
         private Point _startPosition;
         private bool _isMoving = false;
         private bool _isResizing = false;
+        private bool _isText = false;
         private CursorState _direction = CursorState.Out;
         public MainWindow()
         {
@@ -50,6 +52,7 @@ namespace Paint
             Layers = new ObservableCollection<KeyValuePair<string, ILayer>>();
             PenLines = new Dictionary<string, ILayer>();
             ListBoxLayer.ItemsSource = Layers;
+            Cbb_Shape.Items.Add("None");
         }
 
         private void Window_Loaded(object sender, RoutedEventArgs e)
@@ -140,28 +143,47 @@ namespace Paint
                     _isDrawing = false;
                     _penMode = false;
                     _isSelecting = false;
+                    _isText = false;
                     //_isMoving = false;
                     //_isResizing = false;
-                    selectButton.Foreground = colorGray;
+                    if(selectButton != null)
+                        selectButton.Foreground = colorGray;
                     selectedLayer = new KeyValuePair<string, ILayer>();
                     ReDraw();
                     brushButton.Foreground = colorGray;
+                    textButton.Foreground = colorGray;
                     break;
                 case "pen":
+                    Cbb_Shape.SelectedIndex = 0;
                     _isDrawing = false;
                     _penMode = true;
                     _isSelecting = false;
+                    _isText = false;
                     selectButton.Foreground = colorGray;
                     selectedLayer = new KeyValuePair<string, ILayer>();
                     ReDraw();
                     brushButton.Foreground = colorBlack;
+                    textButton.Foreground = colorGray;
                     break;
                 case "select":
+                    Cbb_Shape.SelectedIndex = 0;
                     _isDrawing = false;
                     _penMode = false;
                     _isSelecting = true;
+                    _isText = false;
                     selectButton.Foreground = colorBlack;
                     brushButton.Foreground = colorGray;
+                    textButton.Foreground = colorGray;
+                    break;
+                case "text":
+                    Cbb_Shape.SelectedIndex = 0;
+                    _isDrawing = false;
+                    _penMode = false;
+                    _isSelecting = false;
+                    _isText = true;
+                    selectButton.Foreground = colorGray;
+                    brushButton.Foreground = colorGray;
+                    textButton.Foreground = colorBlack;
                     break;
                 default:
                     break;
@@ -211,6 +233,7 @@ namespace Paint
 
         private void Border_MouseLeftButtonDown(object sender, MouseButtonEventArgs e)
         {
+
             if (_isSelecting)
             {
                 Point pos = e.GetPosition(canvas);
@@ -246,8 +269,8 @@ namespace Paint
                 }
                 ReDraw();
             }
-            else
-            {
+            else {
+                if (_preview == null && _penMode == false) return;
                 _isDrawing = true;
                 Point pos2 = e.GetPosition(canvas);
                 if (_penMode)
@@ -566,7 +589,11 @@ namespace Paint
 
         private void addText_Click(object sender, RoutedEventArgs e)
         {
-            _preview = new Text2D();
+            OnOffStatus("text");
+            if (_isText)
+            {
+                _preview = new Text2D();
+            }
         }
 
         private void cut_Click(object sender, RoutedEventArgs e)
@@ -589,7 +616,7 @@ namespace Paint
                 editLayer.Value.handlePaste(pos);
                 var newObject = (ILayer)editLayer.Value.Clone();
                 editLayer = new KeyValuePair<string, ILayer>(
-                    selectedLayer.Value.GetUniqueName(),
+                    editLayer.Value.GetUniqueName(),
                     newObject
                     );
                 Layers.Insert(0, editLayer);
@@ -599,7 +626,8 @@ namespace Paint
             }
             else if (status == "copy")
             {
-                var newObject = (ILayer)editLayer.Value.Clone();
+                var newObject1 = (ILayer)preSelectedLayer.Value.Clone();
+                var newObject = (ILayer)preSelectedLayer.Value.Clone();
                 //newObject.handlePaste(pos);
                 editLayer = new KeyValuePair<string, ILayer>(
                     newObject.GetUniqueName(),
@@ -615,9 +643,11 @@ namespace Paint
 
         private void copy_Click(object sender, RoutedEventArgs e)
         {
+
             status = "copy";
             if (selectedLayer.Value != null)
             {
+                preSelectedLayer = selectedLayer;
                 editLayer = selectedLayer;
             }
         }
@@ -643,6 +673,7 @@ namespace Paint
         {
 
         }
+
 
         //private void undo_Click(object sender, RoutedEventArgs e)
         //{
