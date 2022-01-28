@@ -51,8 +51,40 @@ namespace Paint
             InitializeComponent();
             Layers = new ObservableCollection<KeyValuePair<string, ILayer>>();
             PenLines = new Dictionary<string, ILayer>();
+            Save();
+            //ListBoxLayer.ItemsSource = ListPreLayers[ListPreLayers.Count-1];
             ListBoxLayer.ItemsSource = Layers;
             Cbb_Shape.Items.Add("None");
+            
+        }
+        public ObservableCollection<KeyValuePair<string, ILayer>> DeepCopy(ObservableCollection<KeyValuePair<string, ILayer>> obj)
+        {
+            var newObj = new ObservableCollection<KeyValuePair<string,ILayer>>();
+            if (obj == null) return null;
+            foreach (var item in obj)
+            {
+                if (newObj.IndexOf(item) < 0)
+                {
+                    newObj.Add(item);
+                }
+            }
+            return newObj;
+        }
+        public void DeepCopyReverse(ObservableCollection<KeyValuePair<string, ILayer>> obj)
+        {
+            
+            if (obj != null)
+            {
+                Layers.Clear();
+                foreach (var item in obj)
+                {
+                    if (Layers.IndexOf(item) < 0)
+                    {
+                        Layers.Add(item);
+                    }
+                }
+            }
+
         }
 
         private void Window_Loaded(object sender, RoutedEventArgs e)
@@ -233,7 +265,6 @@ namespace Paint
 
         private void Border_MouseLeftButtonDown(object sender, MouseButtonEventArgs e)
         {
-
             if (_isSelecting)
             {
                 Point pos = e.GetPosition(canvas);
@@ -261,8 +292,8 @@ namespace Paint
                         }
                         break;
                     }
-
                 }
+
                 if (isSelectNone)
                 {
                     selectedLayer = new KeyValuePair<string, ILayer>();
@@ -311,8 +342,8 @@ namespace Paint
 
             if (!_penMode) {
                 Layers.Insert(0, new KeyValuePair<string, ILayer>(_preview.GetUniqueName(), _preview));
-                //Save();
-                    }
+                Save();
+            }
             else PenLines.Add(_preview.GetUniqueName(), _preview);
             // Sinh ra đối tượng mẫu kế
             if(_preview as IShape != null)
@@ -381,7 +412,6 @@ namespace Paint
                 double deltaX = position.X - _startPosition.X;
                 if (selectedLayer.Value != null && _isMoving)
                 {
-                    
                     selectedLayer.Value.handleMove(new Point2D(deltaX, deltaY));
                     ReDraw();
                 }
@@ -506,7 +536,7 @@ namespace Paint
                 var newDto = IOManager.GetInstance().LoadFromBinaryFile(filename);
                 Layers = newDto.Layers ?? Layers;
                 PenLines = newDto.PenLines ?? PenLines;
-                ListBoxLayer.ItemsSource = Layers;
+                ListBoxLayer.ItemsSource = ListPreLayers[ListPreLayers.Count-1];
                 ReDraw();
             }
         }
@@ -527,7 +557,7 @@ namespace Paint
                 string fileName = imgDialog.FileName;
                 var image = new Image2D(fileName);
                 Layers.Insert(0, new KeyValuePair<string, ILayer>(image.GetUniqueName(), image));
-                //Save();
+                Save();
                 ReDraw();
             }
             
@@ -617,11 +647,6 @@ namespace Paint
             {
                 status = "";
                 editLayer.Value.handlePaste(pos);
-                var newObject = (ILayer)editLayer.Value.Clone();
-                editLayer = new KeyValuePair<string, ILayer>(
-                    editLayer.Value.GetUniqueName(),
-                    newObject
-                    );
                 Layers.Insert(0, editLayer);
                 Layers.Remove(selectedLayer);
                 selectedLayer = editLayer;
@@ -669,14 +694,50 @@ namespace Paint
 
         private void redo_Click(object sender, RoutedEventArgs e)
         {
-
+            if(ListPreLayers.Count < ListLayers.Count)
+            {
+                DeepCopyReverse(ListLayers[ListPreLayers.Count]);
+                ListPreLayers.Add(ListLayers[ListPreLayers.Count]);
+                ReDraw();
+            }
+            else
+            {
+                System.Windows.MessageBox.Show("Can't redo. This is newest version");
+            }
         }
 
         private void undo_Click(object sender, RoutedEventArgs e)
         {
+            if (ListPreLayers.Count > 1)
+            {
+                selectedLayer = new KeyValuePair<string, ILayer>();
+                ListPreLayers.RemoveAt(ListPreLayers.Count - 1);
+                DeepCopyReverse(ListPreLayers[ListPreLayers.Count - 1]);
+                ReDraw();
+            }
+            else
+            {
+                System.Windows.MessageBox.Show("Can't undo. This is oldest version");
+            }
 
         }
-
+        public void Save()
+        {
+            if(ListPreLayers.Count == ListLayers.Count)
+            {
+                ListPreLayers.Add(DeepCopy(Layers));
+                ListLayers.Add(DeepCopy(Layers));
+            }
+            else
+            {
+                while(ListPreLayers.Count != ListLayers.Count)
+                {
+                    ListLayers.RemoveAt(ListLayers.Count - 1);
+                }
+                ListPreLayers.Add(DeepCopy(Layers));
+                ListLayers.Add(DeepCopy(Layers));
+            }
+        }
 
         //private void undo_Click(object sender, RoutedEventArgs e)
         //{
@@ -699,14 +760,6 @@ namespace Paint
 
         //}
 
-        //public void Save()
-        //{
-        //        //if(Layers.Count != numberNotifiLayers)
-        //        //{
-        //        //    ListPreLayers.Add(Layers);
-        //        //    ListLayers = ListPreLayers;
-        //        //    numberNotifiLayers = Layers.Count;
-        //        //}
-        //}
+
     }
 }

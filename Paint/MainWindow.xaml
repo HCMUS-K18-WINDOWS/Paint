@@ -8,7 +8,7 @@
         mc:Ignorable="d"
         ResizeMode="CanResize"
         xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
-        Title="MainWindow" Height="582" Width="1005" WindowStartupLocation="CenterScreen"
+        Title="Paint" Height="582" Width="1005" WindowStartupLocation="CenterScreen"
         xmlns:dxe="http://schemas.devexpress.com/winfx/2008/xaml/editors"
         Loaded="Window_Loaded">
     <!--TextElement.Foreground="{DynamicResource MaterialDesignBody}"
@@ -20,42 +20,40 @@
         FontFamily="{DynamicResource MaterialDesignFont}"-->
     <DockPanel>
 
-        <Menu DockPanel.Dock="Top" Height="25"
+        <Menu  DockPanel.Dock="Top" Height="25"
   IsMainMenu="True">
             <MenuItem Height="25" FontSize="12"
     Header="_File">
                 <MenuItem Click="SaveMenu_Click"
       Header="Save"
       Icon="{materialDesign:PackIcon Kind=ContentSave}"></MenuItem>
-                <MenuItem Header="Load" Click="LoadMenu_Click" />
-                <MenuItem Header="Export" Click="ExportMenu_Click" />
-                <MenuItem Click="Exit_Click"
-      Header="Exit"
-      Icon="{materialDesign:PackIcon Kind=ExitToApp}" />
+                <MenuItem Header="Load" Click="LoadMenu_Click" Icon="{materialDesign:PackIcon Kind=FileImport}"/>
+                <MenuItem Header="Export" Click="ExportMenu_Click" Icon="{materialDesign:PackIcon Kind=FileExport}"/>
+                <MenuItem Click="Exit_Click" Header="Exit" Icon="{materialDesign:PackIcon Kind=ExitToApp}" />
             </MenuItem>
             <MenuItem Height="25" FontSize="12"
     Header="_Edit">
-                <MenuItem
+                <MenuItem Click="cut_Click"
       Header="_Cut"
-      Command="Cut"
       Icon="{materialDesign:PackIcon Kind=ContentCut}" />
                 <MenuItem
-      Header="_Copy"
-      Command="Copy"
+      Header="_Copy" Click="copy_Click"
       Icon="{materialDesign:PackIcon Kind=ContentCopy}" />
                 <MenuItem
-      Header="_Paste"
-      Command="Paste"
+      Header="_Paste" Click="paste_Click"
       Icon="{materialDesign:PackIcon Kind=ContentPaste}" />
+                <MenuItem
+      Header="_Delete" Click="delete_Click"
+      Icon="{materialDesign:PackIcon Kind=DeleteOutline}" />
             </MenuItem>
-            <MenuItem Click="undo_Click" Height="25" Width="47" Icon="{materialDesign:PackIcon Kind=Undo}">
+            <MenuItem x:Name="undo" Click="undo_Click" Height="25" Width="47" Icon="{materialDesign:PackIcon Kind=Undo}">
             </MenuItem>
-            <MenuItem Click="redo_Click" Height="25" Width="47" Icon="{materialDesign:PackIcon Kind=Redo}">
+            <MenuItem x:Name="redo" Click="redo_Click" Height="25" Width="47" Icon="{materialDesign:PackIcon Kind=Redo}">
             </MenuItem>
         </Menu>
 
-        <ToolBarTray DockPanel.Dock="Top">
-            <ToolBar Name="ToolBarTop"
+        <ToolBarTray Background="#eeeeee" DockPanel.Dock="Top">
+            <ToolBar Background="#eeeeee" Height="50" Name="ToolBarTop"
     Style="{DynamicResource MaterialDesignToolBar}"
     ClipToBounds="False">
                 <Label
@@ -64,20 +62,21 @@
                 <ComboBox SelectionChanged="Shape_Selected" Margin="0,0,20,0" x:Name="Cbb_Shape" VerticalAlignment="Center" >
                     
                 </ComboBox>
-                <Button x:Name="selectButton" Click="selectButton_Click" Foreground="Gray" Margin="0,0,10,0" Width="20" Height="20" Style="{StaticResource MaterialDesignFloatingActionMiniAccentButton}"  Background="{x:Null}" BorderBrush="{x:Null}">
+                <Separator></Separator>
+                <Button x:Name="selectButton" Click="selectButton_Click" Foreground="Gray" Margin="0,0,20,0" Width="20" Height="20" Style="{StaticResource MaterialDesignFloatingActionMiniAccentButton}"  Background="{x:Null}" BorderBrush="{x:Null}">
                     <materialDesign:PackIcon Kind="CursorDefault" Width="20" Height="20" VerticalAlignment="Center" HorizontalAlignment="Center"/>
                 </Button>
-                <Button x:Name="brushButton" Click="Brush_Button_Click" Foreground="Gray" Margin="0,0,10,0" Width="20" Height="20" Style="{StaticResource MaterialDesignFloatingActionMiniAccentButton}"  Background="{x:Null}" BorderBrush="{x:Null}">
+                <Button x:Name="brushButton" Click="Brush_Button_Click" Foreground="Gray" Margin="0,0,20,0" Width="20" Height="20" Style="{StaticResource MaterialDesignFloatingActionMiniAccentButton}"  Background="{x:Null}" BorderBrush="{x:Null}">
                     <materialDesign:PackIcon Kind="Brush" Width="20" Height="20" VerticalAlignment="Center" HorizontalAlignment="Center"/>
                 </Button>
-                <Button Click="addText_Click" x:Name="textButton" Foreground="Gray" Margin="0,0,10,0" Width="20" Height="20" Style="{StaticResource MaterialDesignFloatingActionMiniAccentButton}"  Background="{x:Null}" BorderBrush="{x:Null}">
-                    <materialDesign:PackIcon Kind="FormatText" Width="20" Height="20" VerticalAlignment="Center" HorizontalAlignment="Center"/>
+                <Button Click="addText_Click" x:Name="textButton" Foreground="Gray" Margin="0,0,20,0" Width="20" Height="20" Style="{StaticResource MaterialDesignFloatingActionMiniAccentButton}"  Background="{x:Null}" BorderBrush="{x:Null}">
+                    <materialDesign:PackIcon Kind="FormatText" Width="25" Height="25" VerticalAlignment="Center" HorizontalAlignment="Center"/>
                 </Button>
                 <Button x:Name="addImage" Click="addImage_Click" Foreground="Gray" Margin="0,0,10,0" Width="20" Height="20" Style="{StaticResource MaterialDesignFloatingActionMiniAccentButton}"  Background="{x:Null}" BorderBrush="{x:Null}">
-                    <materialDesign:PackIcon Kind="Image" Width="20" Height="20" VerticalAlignment="Center" HorizontalAlignment="Center"/>
+                    <materialDesign:PackIcon Kind="Image" Width="22" Height="22" VerticalAlignment="Center" HorizontalAlignment="Center"/>
                 </Button>
-                <Separator />
-                <Button Click="Color_Table_Selected" Width="20" Height="20" Style="{StaticResource MaterialDesignFloatingActionMiniAccentButton}"  Background="{x:Null}" BorderBrush="{x:Null}">
+                <Separator></Separator>
+                <Button Margin="10,0,0,0" Click="Color_Table_Selected" Width="20" Height="20" Style="{StaticResource MaterialDesignFloatingActionMiniAccentButton}"  Background="{x:Null}" BorderBrush="{x:Null}">
                     <materialDesign:PackIcon Kind="Palette" Width="20" Height="20" VerticalAlignment="Center" HorizontalAlignment="Center"/>
                 </Button>
                 <Border Margin="0,0,20,0" x:Name="color_react" Background="Black" BorderBrush="Black" BorderThickness="2" VerticalAlignment="Center" Height="20" Width="20" />
@@ -85,7 +84,7 @@
                 <Button Click="Color_Table_Fill_Selected" Width="20" Height="20" Style="{StaticResource MaterialDesignFloatingActionMiniAccentButton}"  Background="{x:Null}" BorderBrush="{x:Null}">
                     <materialDesign:PackIcon Kind="FormatColorFill" Width="20" Height="20"/>
                 </Button>
-                <Border x:Name="color_fill_react" Background="White" BorderBrush="Black" BorderThickness="2" VerticalAlignment="Center" Height="20" Width="20" />
+                <Border Margin="0,0,10,0" x:Name="color_fill_react" Background="White" BorderBrush="Black" BorderThickness="2" VerticalAlignment="Center" Height="20" Width="20" />
 
                 <Separator />
 
