@@ -566,6 +566,7 @@ namespace Paint
 
         private void addText_Click(object sender, RoutedEventArgs e)
         {
+            OnOffStatus("shape");
             _preview = new Text2D();
         }
 
