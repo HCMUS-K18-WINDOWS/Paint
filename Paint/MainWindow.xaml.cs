@@ -29,6 +29,9 @@ namespace Paint
     {
         //public Dictionary<string, ILayer> Layers { get; set; }
         public ObservableCollection<KeyValuePair<string, ILayer>> Layers { get; set; }
+        public List<ObservableCollection<KeyValuePair<string, ILayer>>> ListLayers = new List<ObservableCollection<KeyValuePair<string,ILayer>>>();
+        public List<ObservableCollection<KeyValuePair<string, ILayer>>> ListPreLayers = new List<ObservableCollection<KeyValuePair<string, ILayer>>>();
+        
         public KeyValuePair<string, ILayer>  selectedLayer { get; set; }
         public KeyValuePair<string, ILayer> editLayer { get; set; }
         public string status { get; set; }
@@ -89,17 +92,6 @@ namespace Paint
             
         }
 
-        private void TwitterButton_OnClick(object sender, RoutedEventArgs e)
-        {
-
-        }
-
-        private void Sample1_DialogHost_OnDialogClosing(object sender, MaterialDesignThemes.Wpf.DialogClosingEventArgs eventArgs)
-        {
-
-        }
-
-
         private void Color_Table_Selected(object sender, RoutedEventArgs e)
         {
             var dlg = new ColorDialog(); //Khởi tạo đối tượng ColorDialog 
@@ -138,10 +130,6 @@ namespace Paint
             }
         }
 
-        private void Button_Click(object sender, RoutedEventArgs e)
-        {
-
-        }
 
         private void OnOffStatus(string x)
         {
@@ -213,13 +201,6 @@ namespace Paint
             //    brushButton.Foreground = colorGray;
             //}
         }
-
-        //private void Shape_Selected(object sender, RoutedEventArgs e)
-        //{
-        //    var colorGray = new SolidColorBrush(System.Windows.Media.Color.FromRgb(128, 128, 128));
-        //    if (brushButton != null)
-        //        brushButton.Foreground = colorGray;
-        //}
         private void Shape_Selected(object sender, SelectionChangedEventArgs e)
         {
             OnOffStatus("shape");
@@ -227,17 +208,6 @@ namespace Paint
 
         }
 
-        //private void Canvas_MouseDown(object sender, MouseButtonEventArgs e)
-        //{
-        //    if (_isSelecting) return;
-        //    _isDrawing = true;
-        //    Point pos = e.GetPosition(canvas);
-        //    if (_penMode)
-        //    {
-        //        _preview = ShapeBuilder.GetInstance().BuildShape("Line");
-        //    }
-        //    _preview.HandleStart(pos.X, pos.Y);
-        //}
 
         private void Border_MouseLeftButtonDown(object sender, MouseButtonEventArgs e)
         {
@@ -315,8 +285,11 @@ namespace Paint
             // generate name
 
             //Layers.Add(_preview.GetUniqueName(), _preview);
-            
-            if (!_penMode) Layers.Insert(0, new KeyValuePair<string, ILayer>(_preview.GetUniqueName(), _preview));
+
+            if (!_penMode) {
+                Layers.Insert(0, new KeyValuePair<string, ILayer>(_preview.GetUniqueName(), _preview));
+                //Save();
+                    }
             else PenLines.Add(_preview.GetUniqueName(), _preview);
             // Sinh ra đối tượng mẫu kế
             if(_preview as IShape != null)
@@ -531,6 +504,7 @@ namespace Paint
                 string fileName = imgDialog.FileName;
                 var image = new Image2D(fileName);
                 Layers.Insert(0, new KeyValuePair<string, ILayer>(image.GetUniqueName(), image));
+                //Save();
                 ReDraw();
             }
             
@@ -613,6 +587,11 @@ namespace Paint
             {
                 status = "";
                 editLayer.Value.handlePaste(pos);
+                var newObject = (ILayer)editLayer.Value.Clone();
+                editLayer = new KeyValuePair<string, ILayer>(
+                    selectedLayer.Value.GetUniqueName(),
+                    newObject
+                    );
                 Layers.Insert(0, editLayer);
                 Layers.Remove(selectedLayer);
                 selectedLayer = editLayer;
@@ -655,6 +634,45 @@ namespace Paint
             _startPosition = pos;
         }
 
-        
+        private void redo_Click(object sender, RoutedEventArgs e)
+        {
+
+        }
+
+        private void undo_Click(object sender, RoutedEventArgs e)
+        {
+
+        }
+
+        //private void undo_Click(object sender, RoutedEventArgs e)
+        //{
+        //    if(ListPreLayers.Count > 1)
+        //    {
+        //        ListPreLayers.RemoveAt(ListPreLayers.Count - 1);
+        //        Layers = ListPreLayers[ListPreLayers.Count - 1];
+        //        ReDraw();
+        //    }
+        //}
+
+        //private void redo_Click(object sender, RoutedEventArgs e)
+        //{
+        //    if(ListPreLayers.Count < ListLayers.Count)
+        //    {
+        //        ListPreLayers.Add(ListLayers[ListPreLayers.Count]);
+        //        Layers = ListPreLayers[ListPreLayers.Count - 1];
+        //        ReDraw();
+        //    }
+
+        //}
+
+        //public void Save()
+        //{
+        //        //if(Layers.Count != numberNotifiLayers)
+        //        //{
+        //        //    ListPreLayers.Add(Layers);
+        //        //    ListLayers = ListPreLayers;
+        //        //    numberNotifiLayers = Layers.Count;
+        //        //}
+        //}
     }
 }

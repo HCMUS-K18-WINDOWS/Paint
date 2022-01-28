@@ -28,8 +28,8 @@ namespace Paint
 
         public Image2D()
         {
-            _topLeft = new Point2D(0, 0);
-            Offset = new Point2D(0, 0);
+            _topLeft = new Point2D();
+            Offset = new Point2D();
         }
 
         public Image2D(string filePath)
@@ -41,7 +41,10 @@ namespace Paint
 
         public object Clone()
         {
-            return this.MemberwiseClone();
+            var NewImg = (Image2D)this.MemberwiseClone();
+            NewImg._botRight = (Point2D)_botRight.Clone();
+            NewImg._topLeft = (Point2D)_topLeft.Clone();
+            return NewImg;
         }
 
         public UIElement Draw()
@@ -255,12 +258,20 @@ namespace Paint
 
         public void HandleStart(double _x, double _y)
         {
-            return;
+            _topLeft = new Point2D()
+            {
+                X = _x,
+                Y = _y
+            };
         }
 
         public void HandleEnd(double _x, double _y)
         {
-            return;
+            _botRight = new Point2D()
+            {
+                X = _x,
+                Y = _y
+            };
         }
 
         public UIElement DrawBorder()
@@ -287,7 +298,10 @@ namespace Paint
 
         public void handlePaste(Point2D p)
         {
-            throw new NotImplementedException();
+            var width = Math.Abs(_botRight.X - _topLeft.X);
+            var height = Math.Abs(_botRight.Y - _topLeft.Y);
+            HandleStart(p.X, p.Y);
+            HandleEnd(p.X + width, p.Y + height);
         }
     }
 }

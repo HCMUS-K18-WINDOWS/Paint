@@ -48,6 +48,13 @@
       Command="Paste"
       Icon="{materialDesign:PackIcon Kind=ContentPaste}" />
             </MenuItem>
+            <MenuItem Click="undo_Click" Height="25" Width="47" Icon="{materialDesign:PackIcon Kind=Undo}">
+            </MenuItem>
+            <MenuItem Click="redo_Click" Height="25" Width="47" Icon="{materialDesign:PackIcon Kind=Redo}">
+            </MenuItem>
+            <MenuItem>
+                
+            </MenuItem>
         </Menu>
 
         <ToolBarTray DockPanel.Dock="Top">
@@ -139,7 +146,6 @@
             
 
             <materialDesign:DialogHost Grid.Column="1"
-  DialogClosing="Sample1_DialogHost_OnDialogClosing"
   DialogTheme="Inherit">
                 <materialDesign:DialogHost.DialogContent>
                     <StackPanel
