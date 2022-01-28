@@ -604,6 +604,9 @@ namespace Paint
             {
                 editLayer = selectedLayer;
             }
+            Layers.Remove(selectedLayer);
+            selectedLayer = new KeyValuePair<string, ILayer>();
+            ReDraw();
             
         }
 
