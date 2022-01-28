@@ -1,6 +1,6 @@
 # Paint
 
-![alt text](https://i.imgur.com/xZfDTpq.png)
+![alt text](https://imgur.com/a/CEi9p9i)
 
 ## Thông tin nhóm
 
