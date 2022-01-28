@@ -24,8 +24,8 @@
 
 | STT | Họ và tên       | Chức năng                                                                                                                                                                                                                                                                                                                                                                                                                                  | Đánh giá (h) |
 | --- | --------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ | ------------ |
-| 1   | Lê Quốc Đạt     | - Dynamically load all graphic objects that can be drawn from external DLL files.<br> - The user can see the preview of the object they want to draw. <br> - Select a single element for editing again. Transforming horizontally and vertically. Drag & Drop. <br>- Resize object by 4 corner. <br> - Zoom in, zoom out. <br> - Create list layer. <br> - Adding text to the list of drawable objects. <br> - Adding image to the canvas. | 28           |
-| 2   | Huỳnh Quang Nam |
+| 1   | Lê Quốc Đạt     | - Dynamically load all graphic objects that can be drawn from external DLL files <br> - The user can see the preview of the object they want to draw <br> - Select a single element for editing again. Transforming horizontally and vertically. Drag & Drop <br>- Resize object by 4 corner <br> - Zoom in, zoom out <br> - Create list layer <br> - Adding text to the list of drawable objects <br> - Adding image to the canvas | 28           |
+| 2   | Huỳnh Quang Nam | - Design UI <br> - Cut / Copy / Paste <br> - Fill color by boundaries <br> - Adding Layers support <br> - Allow the user to change the color, pen width, stroke type (dash, dot, dash dot dot..._ | 28           |
 | 3   | Vũ Lê Tuấn      | - The list of drawn objects can be saved and loaded again for continuing later <br> - Save and load all drawn objects as an image in bmp/png/jpg format (rasterization) <br> - Apply builder design pattern to select shape and config <br> - Allow user to draw with pen <br> - Base layer design                                                                                                                                         | 28           |
 
 ## Kiến trúc và kỹ thuật
@@ -47,7 +47,7 @@
     You must save in your own defined binary format
 6.  Save and load all drawn objects as an image in bmp/png/jpg format (rasterization). Just one format is fine. No need to save in all three formats.
 
-### Improvements (8.5/11)
+### Improvements (9.5/11)
 
 1.  Allow the user to change the color, pen width, stroke type (dash, dot, dash dot dot...\_
 2.  Adding text to the list of drawable objects
@@ -58,6 +58,7 @@
     Drag & Drop
 7.  Zooming
 8.  Cut / Copy / Paste
+9.  Undo, Redo
 10. Fill color by boundaries
 11. Anything that you think is suitable
 
@@ -68,7 +69,7 @@
 4. Reduce flickering when drawing preview by using buffer to redraw all the canvas
     Upgrade: Only redraw the needed region, no fullscreen redraw
 6. Rotate the image
-9. Undo, Redo
+
 
 ## Bonus
 
