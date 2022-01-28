@@ -47,21 +47,17 @@
     You must save in your own defined binary format
 6.  Save and load all drawn objects as an image in bmp/png/jpg format (rasterization). Just one format is fine. No need to save in all three formats.
 
-### Improvements (x/11)
+### Improvements (8.5/11)
 
 1.  Allow the user to change the color, pen width, stroke type (dash, dot, dash dot dot...\_
 2.  Adding text to the list of drawable objects
 3.  Adding image to the canvas
-4.  Reduce flickering when drawing preview by using buffer to redraw all the canvas
-    Upgrade: Only redraw the needed region, no fullscreen redraw
 5.  Adding Layers support
 6.  Select a single element for editing again
     Transforming horizontally and vertically
-    Rotate the image
     Drag & Drop
 7.  Zooming
 8.  Cut / Copy / Paste
-9.  Undo, Redo
 10. Fill color by boundaries
 11. Anything that you think is suitable
 
@@ -69,7 +65,10 @@
 
 ### Improvements
 
-- Something....
+4. Reduce flickering when drawing preview by using buffer to redraw all the canvas
+    Upgrade: Only redraw the needed region, no fullscreen redraw
+6. Rotate the image
+9. Undo, Redo
 
 ## Bonus
 
