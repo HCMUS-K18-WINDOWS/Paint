@@ -82,4 +82,4 @@
 ## Github and video demo
 
 - Github: https://github.com/HCMUS-K18-WINDOWS/Paint
-- Video demo:
+- Video demo: https://youtu.be/HQgKfxLi2co
